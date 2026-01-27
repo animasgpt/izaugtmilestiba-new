@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { LogOut, Mail, Phone, User, Calendar, MessageSquare, Tag, Loader2 } from "lucide-react";
+import { LogOut, Mail, Phone, User, Calendar, MessageSquare, Tag, Loader2, FileEdit } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -121,13 +122,22 @@ const Admin = () => {
           <h1 className="font-serif text-xl font-bold text-foreground">
             Administrācijas panelis
           </h1>
-          <button
-            onClick={handleLogout}
-            className="inline-flex items-center gap-2 px-4 py-2 text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Izrakstīties
-          </button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => navigate("/admin/content")}
+            >
+              <FileEdit className="w-4 h-4 mr-2" />
+              Labot saturu
+            </Button>
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center gap-2 px-4 py-2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              Izrakstīties
+            </button>
+          </div>
         </div>
       </header>
 
