@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 interface HeaderProps {
   onNavigate: (section: string) => void;
@@ -26,9 +27,12 @@ const Header = ({ onNavigate }: HeaderProps) => {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <button 
           onClick={() => onNavigate("hero")}
-          className="font-serif text-xl md:text-2xl font-bold text-primary hover:text-primary/80 transition-colors"
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
-          Izaugt Mīlestībā
+          <img src={logo} alt="Izaugt Mīlestībā logo" className="h-10 w-auto" />
+          <span className="font-serif text-xl md:text-2xl font-bold text-primary">
+            Izaugt Mīlestībā
+          </span>
         </button>
 
         {/* Desktop Navigation */}
