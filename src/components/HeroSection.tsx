@@ -15,15 +15,16 @@ const HeroSection = ({ onContactClick }: HeroSectionProps) => {
               Izaugt mīlestībā
             </h1>
 
-            <blockquote className="text-lg md:text-xl text-secondary font-medium italic border-l-4 border-primary pl-4">
-              "Atbalsts, kļūstot par vecākiem.""
-              <br />
+            <blockquote className="font-serif text-lg md:text-xl text-secondary font-medium italic border-l-4 border-primary pl-4">
+              Atbalsts, kļūstot par vecākiem.
             </blockquote>
 
-            <div className="space-y-2">
-              <p className="text-muted-foreground">Sertificēta PEP mamma,</p>
-              <p className="text-muted-foreground">"Mammas sajūtu dienasgrāmata" autore</p>
+            <div className="space-y-1">
               <p className="font-semibold text-foreground text-lg">Madara Pauzere</p>
+              <p className="text-muted-foreground">Divu dēlu mamma,</p>
+              <p className="text-muted-foreground">Sertificēta PEP mamma,</p>
+              <p className="text-muted-foreground">Izdevuma "Mammas sajūtu dienasgrāmata" radītāja</p>
+              <p className="text-muted-foreground">Žurnālgrāmatu "Bērniņu gaidot", "Mūsu zīdainis", "Mūsu bērns. 2-3 gadi" veidotāja.</p>
             </div>
 
             <button
