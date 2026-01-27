@@ -68,17 +68,17 @@ const ServicesSection = ({ onContactClick }: ServicesSectionProps) => {
                   {service.title}
                 </h3>
                 
-                <p className="text-muted-foreground mb-6 flex-grow">
+                <p className="font-serif text-muted-foreground mb-6 flex-grow">
                   {service.description}
                 </p>
 
-                <p className="text-2xl font-bold text-foreground mb-6">
+                <p className="font-serif text-2xl font-bold text-foreground mb-6">
                   {service.price}
                 </p>
 
                 <button
                   onClick={onContactClick}
-                  className="w-full inline-flex items-center justify-center px-6 py-3 bg-secondary text-secondary-foreground font-semibold rounded-full hover:bg-secondary/90 transition-all"
+                  className="w-full inline-flex items-center justify-center px-6 py-3 bg-secondary text-secondary-foreground font-serif font-semibold rounded-full hover:bg-secondary/90 transition-all"
                 >
                   Sazinies
                 </button>

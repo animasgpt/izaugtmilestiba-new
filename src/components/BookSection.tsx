@@ -43,7 +43,7 @@ const BookSection = ({ onContactClick }: BookSectionProps) => {
               Mammas sajūtu dienasgrāmata
             </h2>
             
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="font-serif text-lg text-muted-foreground leading-relaxed">
               Šī grāmata ir mans sirds darbs — personīgi stāsti, pārdomas un atziņas 
               par mātes lomu, bērnu audzināšanu un ikdienas izaicinājumiem. Tā ir 
               domāta ikvienai mammai, kas meklē atbalstu un sapratni.
@@ -55,18 +55,18 @@ const BookSection = ({ onContactClick }: BookSectionProps) => {
                   <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center flex-shrink-0">
                     <highlight.icon className="w-5 h-5 text-accent-foreground" />
                   </div>
-                  <span className="text-foreground">{highlight.text}</span>
+                  <span className="font-serif text-foreground">{highlight.text}</span>
                 </div>
               ))}
             </div>
 
             <div className="pt-4">
-              <p className="text-muted-foreground mb-4">
+              <p className="font-serif text-muted-foreground mb-4">
                 Lai iegādātos grāmatu, lūdzu, sazinieties ar mani.
               </p>
               <button
                 onClick={onContactClick}
-                className="inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
+                className="inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground font-serif font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
               >
                 Pasūtīt grāmatu
               </button>
