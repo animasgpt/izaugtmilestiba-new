@@ -15,10 +15,10 @@ const HeroSection = ({ onContactClick }: HeroSectionProps) => {
               Izaugt mīlestībā
             </h1>
 
-            <p className="font-serif text-lg md:text-xl text-secondary font-medium ">Atbalsts, kļūstot par vecākiem.</p>
+            <p className="font-serif text-lg md:text-xl text-secondary font-medium italic">Atbalsts, kļūstot par vecākiem.</p>
 
-            <div className="space-y-1">
-              <p className="font-serif text-foreground text-lg">Madara Pauzere</p>
+            <div className="space-y-1 font-serif">
+              <p className="text-foreground text-lg">Madara Pauzere</p>
               <p className="text-muted-foreground">Divu dēlu mamma,</p>
               <p className="text-muted-foreground">Sertificēta PEP mamma,</p>
               <p className="text-muted-foreground">Izdevuma "Mammas sajūtu dienasgrāmata" radītāja</p>
@@ -29,7 +29,7 @@ const HeroSection = ({ onContactClick }: HeroSectionProps) => {
 
             <button
               onClick={onContactClick}
-              className="inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground font-serif font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               Sazinies ar mani
             </button>

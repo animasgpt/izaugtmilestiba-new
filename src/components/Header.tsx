@@ -39,7 +39,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
             <button
               key={item.section}
               onClick={() => handleNavClick(item.section)}
-              className="text-foreground/80 hover:text-primary transition-colors font-medium"
+              className="font-serif text-foreground/80 hover:text-primary transition-colors font-medium"
             >
               {item.label}
             </button>
@@ -60,7 +60,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
               <button
                 key={item.section}
                 onClick={() => handleNavClick(item.section)}
-                className="text-foreground/80 hover:text-primary transition-colors font-medium text-left py-2"
+                className="font-serif text-foreground/80 hover:text-primary transition-colors font-medium text-left py-2"
               >
                 {item.label}
               </button>

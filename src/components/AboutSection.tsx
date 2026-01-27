@@ -8,7 +8,7 @@ const AboutSection = () => {
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-6">
             Par mani
           </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
+          <p className="font-serif text-lg text-muted-foreground leading-relaxed">
             Esmu sertificēta PEP (Parent Effectiveness Program) mamma un grāmatas 
             "Mammas sajūtu dienasgrāmata" autore. Mana misija ir palīdzēt vecākiem 
             veidot ciešākas, mīlošākas attiecības ar saviem bērniem, izmantojot 
@@ -17,7 +17,7 @@ const AboutSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-background p-8 rounded-xl shadow-md text-center hover:shadow-lg transition-shadow">
+          <div className="bg-background p-8 rounded-xl shadow-md text-center hover:shadow-lg transition-shadow font-serif">
             <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
               <Heart className="w-8 h-8 text-accent-foreground" />
             </div>
@@ -29,7 +29,7 @@ const AboutSection = () => {
             </p>
           </div>
 
-          <div className="bg-background p-8 rounded-xl shadow-md text-center hover:shadow-lg transition-shadow">
+          <div className="bg-background p-8 rounded-xl shadow-md text-center hover:shadow-lg transition-shadow font-serif">
             <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
               <Users className="w-8 h-8 text-accent-foreground" />
             </div>
@@ -41,7 +41,7 @@ const AboutSection = () => {
             </p>
           </div>
 
-          <div className="bg-background p-8 rounded-xl shadow-md text-center hover:shadow-lg transition-shadow">
+          <div className="bg-background p-8 rounded-xl shadow-md text-center hover:shadow-lg transition-shadow font-serif">
             <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
               <BookOpen className="w-8 h-8 text-accent-foreground" />
             </div>
