@@ -15,9 +15,9 @@ const HeroSection = ({ onContactClick }: HeroSectionProps) => {
               Izaugt mīlestībā
             </h1>
 
-            <blockquote className="font-serif text-lg md:text-xl text-secondary font-medium italic border-l-4 border-primary pl-4">
+            <p className="font-serif text-lg md:text-xl text-secondary font-medium italic">
               Atbalsts, kļūstot par vecākiem.
-            </blockquote>
+            </p>
 
             <div className="space-y-1">
               <p className="font-semibold text-foreground text-lg">Madara Pauzere</p>
