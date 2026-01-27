@@ -14,22 +14,16 @@ const HeroSection = ({ onContactClick }: HeroSectionProps) => {
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
               Izaugt mīlestībā
             </h1>
-            
+
             <blockquote className="text-lg md:text-xl text-secondary font-medium italic border-l-4 border-primary pl-4">
-              "Bērniem nav vajadzīgi perfekti vecāki.<br />
-              Bērniem ir vajadzīgi mīloši vecāki."
+              "Atbalsts, kļūstot par vecākiem.""
+              <br />
             </blockquote>
 
             <div className="space-y-2">
-              <p className="text-muted-foreground">
-                Sertificēta PEP mamma,
-              </p>
-              <p className="text-muted-foreground">
-                "Mammas sajūtu dienasgrāmata" autore
-              </p>
-              <p className="font-semibold text-foreground text-lg">
-                Madara Pauzere
-              </p>
+              <p className="text-muted-foreground">Sertificēta PEP mamma,</p>
+              <p className="text-muted-foreground">"Mammas sajūtu dienasgrāmata" autore</p>
+              <p className="font-semibold text-foreground text-lg">Madara Pauzere</p>
             </div>
 
             <button
@@ -43,11 +37,7 @@ const HeroSection = ({ onContactClick }: HeroSectionProps) => {
           {/* Image */}
           <div className="relative">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-              <img
-                src={heroImage}
-                alt="Madara Pauzere - PEP mamma"
-                className="w-full h-auto object-cover"
-              />
+              <img src={heroImage} alt="Madara Pauzere - PEP mamma" className="w-full h-auto object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
             </div>
             {/* Decorative element */}
