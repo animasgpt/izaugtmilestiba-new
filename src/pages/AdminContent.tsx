@@ -1,56 +1,16 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ContentEditor from "@/components/admin/ContentEditor";
 import { useSiteContent } from "@/hooks/useSiteContent";
+import { useAdminAuth } from "@/hooks/useAdminAuth";
 
 const AdminContent = () => {
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const { isLoading: isAuthLoading, isAuthorized } = useAdminAuth();
   const { data: content, isLoading: contentLoading } = useSiteContent();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        navigate("/admin-login");
-        return;
-      }
-
-      // Check admin role
-      const { data: roles } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id)
-        .eq("role", "admin")
-        .maybeSingle();
-
-      if (!roles) {
-        await supabase.auth.signOut();
-        navigate("/admin-login");
-        return;
-      }
-
-      setIsAuthorized(true);
-      setIsLoading(false);
-    };
-
-    checkAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "SIGNED_OUT") {
-        navigate("/admin-login");
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-
-  if (isLoading) {
+  if (isAuthLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
