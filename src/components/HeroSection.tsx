@@ -18,7 +18,7 @@ const HeroSection = ({ onContactClick }: HeroSectionProps) => {
             <p className="font-serif text-lg md:text-xl text-secondary font-medium ">Atbalsts, kļūstot par vecākiem.</p>
 
             <div className="space-y-1">
-              <p className="font-semibold text-foreground text-lg">Madara Pauzere</p>
+              <p className="font-serif text-foreground text-lg">Madara Pauzere</p>
               <p className="text-muted-foreground">Divu dēlu mamma,</p>
               <p className="text-muted-foreground">Sertificēta PEP mamma,</p>
               <p className="text-muted-foreground">Izdevuma "Mammas sajūtu dienasgrāmata" radītāja</p>
