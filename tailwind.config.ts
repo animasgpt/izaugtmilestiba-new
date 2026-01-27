@@ -94,9 +94,9 @@ export default {
   			xl: 'var(--shadow-xl)',
   			'2xl': 'var(--shadow-2xl)'
   		},
-  		fontFamily: {
+		fontFamily: {
   			sans: [
-  				'Source Sans Pro',
+  				'Lato',
   				'ui-sans-serif',
   				'system-ui',
   				'-apple-system',
@@ -109,7 +109,7 @@ export default {
   				'sans-serif'
   			],
   			serif: [
-  				'Source Serif Pro',
+  				'Playfair Display',
   				'ui-serif',
   				'Georgia',
   				'Cambria',
