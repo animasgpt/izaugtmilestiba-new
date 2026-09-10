@@ -2,33 +2,36 @@ import { MessageSquare, BookOpen } from "lucide-react";
 import consultationOnsiteImg from "@/assets/consultation-onsite.jpg";
 import consultationOnlineImg from "@/assets/consultation-online.jpg";
 import bookImage from "@/assets/book-cover.jpg";
+import { useSanitySiteSettings } from "@/hooks/useSanitySiteSettings";
 
 interface ServicesSectionProps {
   onContactClick: () => void;
 }
 
 const ServicesSection = ({ onContactClick }: ServicesSectionProps) => {
+  const { data: settings } = useSanitySiteSettings();
+
   const services = [
     {
       image: consultationOnsiteImg,
       icon: MessageSquare,
       title: "Konsultācija klātienē",
       description: "Individuāla saruna mājīgā vidē, veltot pilnu uzmanību Tev un Tavām sajūtām.",
-      price: "50€",
+      price: settings?.inPersonPrice || "50€",
     },
     {
       image: consultationOnlineImg,
       icon: MessageSquare,
       title: "Konsultācija online",
       description: "Ērts un pieejams atbalsts no jebkuras vietas, kur jūties vislabāk.",
-      price: "35€",
+      price: settings?.onlinePrice || "35€",
     },
     {
       image: bookImage,
       icon: BookOpen,
       title: "Grāmata",
       description: "\"Mammas sajūtu dienasgrāmata\" – Tavs ceļvedis un atbalsts ikdienas gaitās.",
-      price: "19.99€",
+      price: settings?.journalPrice || "19.99€",
     },
   ];
 
