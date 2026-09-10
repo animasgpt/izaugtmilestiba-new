@@ -1,10 +1,15 @@
 import heroImage from "@/assets/hero-madara.jpg";
+import { useSanitySiteSettings } from "@/hooks/useSanitySiteSettings";
 
 interface HeroSectionProps {
   onContactClick: () => void;
 }
 
 const HeroSection = ({ onContactClick }: HeroSectionProps) => {
+  const { data: settings } = useSanitySiteSettings();
+  const heroTitle = settings?.heroTitle || "Izaugt mīlestībā";
+  const intro = settings?.intro || "Atbalsts, kļūstot par vecākiem.";
+
   return (
     <section id="hero" className="min-h-screen pt-20 relative overflow-hidden">
       <div className="container mx-auto px-4 py-12 md:py-20">
@@ -12,10 +17,10 @@ const HeroSection = ({ onContactClick }: HeroSectionProps) => {
           {/* Text Content */}
           <div className="space-y-6 md:space-y-8">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-              Izaugt mīlestībā
+              {heroTitle}
             </h1>
 
-            <p className="font-serif text-lg md:text-xl text-secondary font-medium italic">Atbalsts, kļūstot par vecākiem.</p>
+            <p className="font-serif text-lg md:text-xl text-secondary font-medium italic">{intro}</p>
 
             <div className="space-y-1 font-serif">
               <p className="text-foreground text-lg">Madara Pauzere</p>
