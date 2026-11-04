@@ -1,15 +1,13 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
 import { sanityClient } from '@/lib/sanity';
 import { withArticlePages } from '../../cms/articles';
 import { defaultSnapshot } from '../../cms/defaults';
-import type { SiteSnapshot } from '../../cms/model';
+import type { CmsArticle, SiteSnapshot } from '../../cms/model';
+import { SITE_QUERY, ARTICLE_QUERY } from '../../cms/query';
+import { normalizePath, pagePath } from '../../cms/routing';
 
-export const SITE_QUERY = `{
-  "settings": coalesce(*[_id == "siteSettings"][0], *[_type == "siteSettings"] | order(_createdAt asc)[0]),
-  "pages": *[_type == "page"] | order(_id asc),
-  "articles": *[_type == "article"] | order(publishedAt desc)
-}`;
 const CmsContext = createContext<{ snapshot: SiteSnapshot; preview: boolean; editing: boolean; loading: boolean; error: boolean }>({
   snapshot: defaultSnapshot, preview: false, editing: false, loading: true, error: false,
 });
@@ -21,13 +19,19 @@ export function CmsProvider({ children }: { children: ReactNode }) {
   const query = useQuery({
     queryKey: ['cms-site'],
     queryFn: () => sanityClient.fetch<SiteSnapshot>(SITE_QUERY, {}, { perspective: 'published' }),
+    initialData: typeof __CMS_INITIAL_SNAPSHOT__ === 'undefined' ? undefined : __CMS_INITIAL_SNAPSHOT__ ?? undefined,
+    // The embedded copy is immediately visible, but never delays a live refresh.
+    initialDataUpdatedAt: 0,
     staleTime: 60_000, retry: 1, refetchOnWindowFocus: true,
   });
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     const subscription = sanityClient.listen('*[_type in ["page", "siteSettings", "article"] && !(_id in path("drafts.**"))]', {},
       { includeResult: false, visibility: 'query' }).subscribe({
-      next: () => { clearTimeout(timer); timer = setTimeout(() => void queryClient.invalidateQueries({ queryKey: ['cms-site'] }), 200); },
+      next: () => { clearTimeout(timer); timer = setTimeout(() => {
+        void queryClient.invalidateQueries({ queryKey: ['cms-site'] });
+        void queryClient.invalidateQueries({ queryKey: ['cms-article'] });
+      }, 200); },
       error: () => { /* Focus refetch remains available if realtime is interrupted. */ },
     });
     return () => { clearTimeout(timer); subscription.unsubscribe(); };
@@ -50,9 +54,23 @@ export function CmsProvider({ children }: { children: ReactNode }) {
   const live = query.data;
   // Keep the existing public site available until the additive CMS seed is installed.
   // Once any CMS pages exist, missing/deleted pages must stay missing (404).
-  const snapshot = withArticlePages(previewSnapshot || ((live?.settings?.builderVersion === 1 || live?.pages?.length) ? live : {
+  const baseSnapshot = previewSnapshot || ((live?.settings?.builderVersion === 1 || live?.pages?.length) ? live : {
     settings: { ...defaultSnapshot.settings, ...live?.settings }, pages: defaultSnapshot.pages,
-  }));
+  });
+  const location = useLocation();
+  const path = normalizePath(location.pathname);
+  const routedSnapshot = withArticlePages(baseSnapshot);
+  const activeArticle = routedSnapshot.pages.find(page => page.sourceType === 'article' && pagePath(page, routedSnapshot.pages) === path);
+  const articleQuery = useQuery({
+    queryKey: ['cms-article', activeArticle?._id],
+    queryFn: () => sanityClient.fetch<CmsArticle | null>(ARTICLE_QUERY, { id: activeArticle!._id }, { perspective: 'published' }),
+    enabled: !!activeArticle && !previewSnapshot,
+    staleTime: 60_000, retry: 1,
+  });
+  const snapshot = articleQuery.data && activeArticle && !previewSnapshot ? withArticlePages({
+    ...baseSnapshot,
+    articles: baseSnapshot.articles?.map(article => article._id === articleQuery.data!._id ? articleQuery.data! : article),
+  }) : routedSnapshot;
   return <CmsContext.Provider value={{ snapshot, preview, editing, loading: query.isLoading && !previewSnapshot, error: query.isError }}>
     {preview && <div className="cms-preview-banner">Priekšskatījums · izmaiņas kļūst publiskas pēc “Publish”{!previewSnapshot && ' · Gaida savienojumu ar Sanity…'}</div>}
     {children}
