@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useClient } from 'sanity';
 import { useRouter } from 'sanity/router';
+import { withArticlePages } from '../../cms/articles';
 import { pagePath } from '../../cms/routing';
-import type { CmsPage, SiteSettings, SiteSnapshot } from '../../cms/model';
+import type { CmsArticle, CmsPage, SiteSettings, SiteSnapshot } from '../../cms/model';
 
 const controlStyle = { padding: '7px 12px', border: '1px solid #b7c0ba', borderRadius: 6, background: '#f8faf8', color: '#17271d', cursor: 'pointer' };
 interface Props { document?: { displayed?: Record<string, unknown> | null } }
-const query = `{"settings": coalesce(*[_id == "siteSettings"][0], *[_type == "siteSettings"] | order(_createdAt asc)[0]), "pages": *[_type == "page"]}`;
+const query = `{"settings": coalesce(*[_id == "siteSettings"][0], *[_type == "siteSettings"] | order(_createdAt asc)[0]), "pages": *[_type == "page"], "articles": *[_type == "article"] | order(publishedAt desc)}`;
 export function PreviewPane({ document }: Props) {
   const baseClient = useClient({ apiVersion: '2026-09-10' });
   const client = useMemo(() => baseClient.withConfig({ useCdn: false, perspective: 'drafts' }), [baseClient]);
@@ -25,12 +26,17 @@ export function PreviewPane({ document }: Props) {
       const page = { ...displayed, _id: String(displayed._id).replace(/^drafts\./, '') } as unknown as CmsPage;
       pages = [...pages.filter(item => item._id !== page._id), page];
     }
-    return { settings: displayed?._type === 'siteSettings' ? displayed as SiteSettings : settings, pages };
+    let articles = data.articles || [];
+    if (displayed?._type === 'article') {
+      const article = { ...displayed, _id: String(displayed._id).replace(/^drafts\./, '') } as unknown as CmsArticle;
+      articles = [...articles.filter(item => item._id.replace(/^drafts\./, '') !== article._id), article];
+    }
+    return withArticlePages({ settings: displayed?._type === 'siteSettings' ? displayed as SiteSettings : settings, pages, articles });
   }, [data, displayed]);
   const url = useMemo(() => {
     let base = snapshot.settings?.siteUrl || process.env.SANITY_STUDIO_PREVIEW_URL || 'http://127.0.0.1:8080';
     try { if (!/^https?:$/.test(new URL(base).protocol)) base = 'http://127.0.0.1:8080'; } catch { base = 'http://127.0.0.1:8080'; }
-    const page = displayed?._type === 'page' ? snapshot.pages.find(p => p._id === String(displayed._id).replace(/^drafts\./, '')) : undefined;
+    const page = (displayed?._type === 'page' || displayed?._type === 'article') ? snapshot.pages.find(p => p._id === String(displayed._id).replace(/^drafts\./, '')) : undefined;
     const path = page ? pagePath(page, snapshot.pages) : '/';
     const result = new URL(path || '/', base);
     result.searchParams.set('cms-preview', '1');
@@ -42,7 +48,7 @@ export function PreviewPane({ document }: Props) {
     const fetch = () => void client.fetch<SiteSnapshot>(query).then(result => { if (active) { setData(result); setError(''); } })
       .catch(() => { if (active) setError('Nepieciešama piekļuve Sanity projektam. Pārbaudiet pieslēgšanos un CORS.'); });
     fetch();
-    const sub = client.listen('*[_type in ["page", "siteSettings"]]', {}, { includeResult: false }).subscribe({
+    const sub = client.listen('*[_type in ["page", "siteSettings", "article"]]', {}, { includeResult: false }).subscribe({
       next: () => { clearTimeout(timer); timer = setTimeout(fetch, 300); }, error: () => setError('Reāllaika savienojums pārtrūka. Atveriet priekšskatījumu vēlreiz.'),
     });
     return () => { active = false; clearTimeout(timer); sub.unsubscribe(); };

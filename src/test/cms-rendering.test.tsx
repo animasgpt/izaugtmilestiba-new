@@ -70,6 +70,14 @@ describe('Sanity controls the actual public website', () => {
     mount(data);
     expect(await screen.findByRole('heading', { name: 'Lapa nav atrasta' })).toBeInTheDocument();
   });
+  it('renders existing articles and updates their text from the same CMS snapshot', async () => {
+    const data = snapshot();
+    data.pages.push({ _id: 'page-articles', _type: 'page', title: 'Raksti', slug: { current: 'raksti' }, sections: [{ _key: 'list', _type: 'articleListSection', title: 'Rakstu saraksts' }] });
+    data.articles = [{ _id: 'article-one', _type: 'article', title: 'Esošais raksts', slug: { current: 'esosais' }, excerpt: 'Raksta ievads', body: [{ _type: 'block', _key: 'p', children: [{ _type: 'span', _key: 's', text: 'Saglabātais raksta teksts' }] }] }];
+    mount(data, '/raksti/esosais');
+    expect(await screen.findByRole('heading', { name: 'Esošais raksts' })).toBeInTheDocument();
+    expect(screen.getByText('Saglabātais raksta teksts')).toBeInTheDocument();
+  });
   it('respects removal of optional form choices and the footer title', async () => {
     const data = snapshot();
     data.pages[0].sections = [{ _type: 'contactSection', _key: 'contact', title: 'Forma' }];

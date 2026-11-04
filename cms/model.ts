@@ -24,14 +24,14 @@ export interface CmsItem {
   price?: string; link?: CmsLink; author?: string; role?: string; value?: string;
 }
 export type SectionType = 'heroSection' | 'textSection' | 'imageTextSection' | 'cardsSection'
-  | 'gallerySection' | 'faqSection' | 'testimonialsSection' | 'ctaSection' | 'contactSection' | 'statsSection' | 'spacerSection';
+  | 'gallerySection' | 'faqSection' | 'testimonialsSection' | 'ctaSection' | 'contactSection' | 'statsSection' | 'spacerSection' | 'articleListSection';
 export interface CmsSection {
   _key: string; _type: SectionType; label?: string; anchor?: string; hidden?: boolean;
   style?: SectionStyle; eyebrow?: string; title?: string; subtitle?: string; body?: RichBlock[];
   image?: CmsImage; imagePosition?: 'left' | 'right'; imageFit?: 'cover' | 'contain';
   layout?: 'split' | 'center' | 'background'; buttons?: CmsLink[]; items?: CmsItem[];
   columns?: 1 | 2 | 3 | 4; imageRatio?: 'landscape' | 'square' | 'portrait';
-  contact?: ContactSettings; height?: number;
+  contact?: ContactSettings; height?: number; articleLinkLabel?: string;
 }
 export interface ContactSettings {
   nameLabel?: string; emailLabel?: string; phoneLabel?: string; messageLabel?: string;
@@ -41,7 +41,7 @@ export interface ContactSettings {
 }
 export interface SeoSettings { title?: string; description?: string; image?: CmsImage; noIndex?: boolean }
 export interface CmsPage {
-  _id: string; _type: 'page'; title: string; slug?: { current: string }; parent?: { _ref: string };
+  sourceType?: 'article'; _id: string; _type: 'page'; title: string; slug?: { current: string }; parent?: { _ref: string };
   sections?: CmsSection[]; seo?: SeoSettings; hideHeader?: boolean; hideFooter?: boolean;
 }
 export interface SiteSettings {
@@ -57,4 +57,5 @@ export interface SiteSettings {
   // Legacy fields remain readable during the additive migration.
   heroTitle?: string; intro?: string; inPersonPrice?: string; onlinePrice?: string; journalPrice?: string;
 }
-export interface SiteSnapshot { settings: SiteSettings | null; pages: CmsPage[] }
+export interface CmsArticle { _id: string; _type: 'article'; title: string; slug?: {current: string}; excerpt?: string; body?: RichBlock[]; coverImage?: CmsImage; category?: string; publishedAt?: string; sourceUrl?: string; sourceLinkLabel?: string }
+export interface SiteSnapshot { settings: SiteSettings | null; pages: CmsPage[]; articles?: CmsArticle[] }

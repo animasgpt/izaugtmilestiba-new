@@ -1,3 +1,4 @@
+import { withArticlePages } from '../../cms/articles';
 import { describe, expect, it } from 'vitest';
 import { pagePath, linkHref, safeHref } from '../../cms/routing';
 import { hexToHsl, themeVariables } from '../lib/cmsTheme';
@@ -37,5 +38,26 @@ describe('editable website theme', () => {
     expect(vars['--radius']).toBe('40px');
     expect(vars['--cms-width']).toBe('1600px');
     expect(vars['--cms-button-radius']).toBe('999px');
+  });
+});
+
+describe('existing Sanity article compatibility', () => {
+  it('gives duplicate legacy slugs unique routes and follows the collection address', () => {
+    const source = { settings: null, pages: [page('page-articles', 'padomi')], articles: [
+      { _id: 'first', _type: 'article' as const, title: 'Pirmais', slug: { current: 'viens' } },
+      { _id: 'second', _type: 'article' as const, title: 'Otrais', slug: { current: 'viens' } },
+    ] };
+    const result = withArticlePages(source);
+    expect(pagePath(result.pages[1], result.pages)).toBe('/padomi/viens-first');
+    expect(pagePath(result.pages[2], result.pages)).toBe('/padomi/viens-second');
+    expect(source.pages).toHaveLength(1);
+    expect(withArticlePages(result).pages).toHaveLength(3);
+  });
+  it('normalizes a draft article id for preview links without exposing a draft through public fetching', () => {
+    const result = withArticlePages({ settings: null, pages: [page('page-articles', 'raksti')], articles: [
+      { _id: 'drafts.example', _type: 'article', title: 'Mīlestībā', slug: { current: 'mīlestībā' } },
+    ] });
+    expect(result.articles[0]._id).toBe('example');
+    expect(pagePath(result.pages[1], result.pages)).toBe('/raksti/milestiba');
   });
 });

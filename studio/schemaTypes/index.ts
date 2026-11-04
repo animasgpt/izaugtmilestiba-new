@@ -96,6 +96,7 @@ const sections = [
   section('ctaSection', 'Aicinājums / pogas', [...introFields, links()]),
   section('contactSection', 'Kontaktforma', [...introFields, defineField({ name: 'contact', title: 'Tikai šīs formas iestatījumi', type: 'contactSettings', description: 'Ja neaizpildāt, lieto kopējos kontaktformas iestatījumus.' })]),
   section('statsSection', 'Skaitļi un sasniegumi', [...introFields, itemArray('statistic', 'Skaitļi'), columns]),
+  section('articleListSection', 'Rakstu saraksts', [...introFields, columns, string('articleLinkLabel', 'Raksta pogas teksts')]),
   section('spacerSection', 'Brīva vieta', [defineField({ name: 'height', title: 'Augstums (pikseļos)', type: 'number', initialValue: 48, validation: rule => rule.min(0).max(240) })]),
 ];
 const seo = defineType({ name: 'seoSettings', title: 'Meklētāji un kopīgošana', type: 'object', fields: [string('title', 'Virsraksts pārlūka cilnē / Google'), defineField({ name: 'description', title: 'Apraksts', type: 'text', rows: 3, validation: rule => rule.max(180).warning('Ieteicams līdz 180 zīmēm.') }), image('image', 'Attēls kopīgošanai'), defineField({ name: 'noIndex', title: 'Nerādīt lapu meklētājos', type: 'boolean', description: 'Lapa joprojām būs publiski pieejama pēc adreses. Šis iestatījums neierobežo piekļuvi.' })] });
@@ -160,4 +161,13 @@ const siteSettings = defineType({ name: 'siteSettings', title: 'Vietnes iestatī
   ...['heroTitle','intro','inPersonPrice','onlinePrice','journalPrice'].map(name => ({ ...string(name, name), group: 'legacy', readOnly: true, description: 'Saglabāts migrācijai. Jaunos tekstus un cenas mainiet attiecīgajā lapas sadaļā.' })),
 ], preview: { prepare: () => ({ title: 'Izaugt mīlestībā — kopējie iestatījumi' }) } });
 
-export const schemaTypes: SchemaTypeDefinition[] = [siteSettings, page, cmsLink, navigationLink, siteImage, richText, sectionStyle, contentCard, galleryItem, faqItem, testimonial, statistic, contactSettings, seo, ...sections];
+const article = defineType({ name: 'article', title: 'Raksts', type: 'document', fields: [
+  defineField({ name: 'title', title: 'Virsraksts', type: 'string', validation: rule => rule.required() }),
+  defineField({ name: 'slug', title: 'Adrese', type: 'slug', options: { source: 'title', isUnique: () => true } }),
+  defineField({ name: 'excerpt', title: 'Īsais apraksts', type: 'text', rows: 3 }),
+  defineField({ name: 'body', title: 'Raksta teksts', type: 'array', of: [{ type: 'block' }] }),
+  defineField({ name: 'coverImage', title: 'Vāka attēls', type: 'image', options: { hotspot: true }, fields: [string('alt', 'Attēla apraksts')] }),
+  string('category', 'Kategorija'), defineField({ name: 'publishedAt', title: 'Publicēšanas datums', type: 'datetime' }),
+  defineField({ name: 'sourceUrl', title: 'Sākotnējā avota saite', type: 'url' }), string('sourceLinkLabel', 'Sākotnējā avota pogas teksts'),
+], preview: { select: { title: 'title', media: 'coverImage', subtitle: 'category' } } });
+export const schemaTypes: SchemaTypeDefinition[] = [article, siteSettings, page, cmsLink, navigationLink, siteImage, richText, sectionStyle, contentCard, galleryItem, faqItem, testimonial, statistic, contactSettings, seo, ...sections];

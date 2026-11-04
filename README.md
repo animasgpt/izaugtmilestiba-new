@@ -2,7 +2,7 @@
 
 React/Vite vietne ar Sanity vadītām lapām, sadaļām un dizainu. Kontaktformas pieteikumi un administrācijas pieslēgšanās glabājas jūsu Supabase projektā. Bezmaksas frontend hostingam izmantojams Cloudflare Pages.
 
-- [Atvērt Sanity redaktoru](https://izaugtmilestiba-redaktors.sanity.studio/)
+- [Atvērt Sanity redaktoru](https://izaugtmilestiba-sxvw8jh8.sanity.studio/)
 - [Lapu rediģēšana, priekšskatījums un pieslēgšana](SANITY.md)
 - [Datubāzes pārnešanas instrukcija](MIGRATION.md)
 

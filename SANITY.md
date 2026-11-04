@@ -1,8 +1,8 @@
 # Vietnes rediģēšana Sanity
 
-**Redaktors:** https://izaugtmilestiba-redaktors.sanity.studio/
+**Redaktors:** https://izaugtmilestiba-sxvw8jh8.sanity.studio/
 
-Izmantojiet to pašu Sanity pieslēgšanos, kurai ir pieeja projektam **Izaugt Mīlestībā** (`vl2g5s69`). Redaktors un izmantotās iespējas neprasa maksas Sanity spraudņus.
+Izmantojiet to pašu Sanity pieslēgšanos, kurai ir pieeja projektam **Izaugt Mīlestībā** (`sxvw8jh8`). Redaktors un izmantotās iespējas neprasa maksas Sanity spraudņus.
 
 ## Ikdienas darbs bez koda
 
@@ -23,7 +23,7 @@ Izmantojiet to pašu Sanity pieslēgšanos, kurai ir pieeja projektam **Izaugt M
 | E-pasts, telefons, formas teksti un pakalpojumi | Kopējie iestatījumi → Kontakti un forma |
 | Pārlūka cilnes nosaukums, apraksts, kopīgošanas attēls | Katrā lapā → Google un kopīgošana |
 
-Sadaļu katalogā ir **11 veidi**: ievads, teksts, attēls ar tekstu, kartītes/pakalpojumi, galerija, jautājumi un atbildes, atsauksmes, aicinājums/pogas, kontaktforma, skaitļi un brīva vieta. Katru var izmantot vairākas reizes. Telefonam izkārtojums pielāgojas automātiski.
+Sadaļu katalogā ir **12 veidi**: ievads, teksts, attēls ar tekstu, kartītes/pakalpojumi, galerija, jautājumi un atbildes, atsauksmes, aicinājums/pogas, kontaktforma, skaitļi, rakstu saraksts un brīva vieta. Katru var izmantot vairākas reizes. Telefonam izkārtojums pielāgojas automātiski.
 
 ### Jauna lapa un tās adrese
 
@@ -61,7 +61,7 @@ Cloudflare Pages izmantojiet:
 - Root directory: repo sakne.
 - Node: 22.12 vai jaunāks Node 22 izlaidums.
 - Mainīgie: jaunā projekta `VITE_SUPABASE_URL` un `VITE_SUPABASE_PUBLISHABLE_KEY`.
-- Sanity: `VITE_SANITY_PROJECT_ID=vl2g5s69`, `VITE_SANITY_DATASET=production` un `VITE_SANITY_STUDIO_URL=https://izaugtmilestiba-redaktors.sanity.studio`.
+- Sanity: `VITE_SANITY_PROJECT_ID=sxvw8jh8`, `VITE_SANITY_DATASET=production` un `VITE_SANITY_STUDIO_URL=https://izaugtmilestiba-sxvw8jh8.sanity.studio`.
 
 Sanity redaktorā “Google un adreses” laukā **Vietnes gala adrese** ievadiet jaunās vietnes HTTPS adresi un publicējiet. Priekšskatījums to izmantos automātiski; Studio nav jāpārkompilē.
 
@@ -120,6 +120,12 @@ Avoti: [Sanity Free](https://www.sanity.io/pricing), [Studio shēmas](https://ww
 
 ## Veiktās pārbaudes
 
-Frontend un Studio produkcijas kompilācija, abas TypeScript pārbaudes un 23 Vitest testi. Sanity shēmu validācijā un trīs ievietoto dokumentu validācijā nav kļūdu vai brīdinājumu. Pārlūkā pārbaudīts reālais publicētais Sanity saturs, mobilā izvēlne un izkārtojums bez horizontālas ritināšanas. Atsevišķā iframe pārbaudīti melnrakstu atjauninājumi, jaunas apakšlapas navigācija, klikšķa avota lauks, sveša origin noraidīšana un formas sūtīšanas bloķēšana priekšskatījumā.
+Frontend un Studio produkcijas kompilācija, abas TypeScript pārbaudes un 26 Vitest testi. Sanity shēmu validācijā un vietnes dokumentu un esošo rakstu validācijā nav kļūdu vai brīdinājumu. Pārlūkā pārbaudīts reālais publicētais Sanity saturs, mobilā izvēlne un izkārtojums bez horizontālas ritināšanas. Atsevišķā iframe pārbaudīti melnrakstu atjauninājumi, jaunas apakšlapas navigācija, klikšķa avota lauks, sveša origin noraidīšana un formas sūtīšanas bloķēšana priekšskatījumā.
 
 Pilnajā repozitorija lint pārbaudē paliek iepriekšējās 4 kļūdas nemainītajos failos. Jaunajam CMS kodam lint kļūdu nav; ir divi Fast Refresh organizācijas brīdinājumi. Dzīvā kontaktforma ar jaunā Supabase konta atslēgām jāpārbauda pēc hostinga pieslēgšanas.
+
+## Izvēlētais projekts sxvw8jh8
+
+Frontend un Studio noklusējumi ir pārslēgti uz `sxvw8jh8`. Šajā projektā saglabāti arī agrākie raksti un to melnraksti. Tie pieejami Studio sadaļā “Raksti”, bet publicētajā vietnē — lapā `/raksti` un atsevišķās rakstu apakšlapās. Vienādu iepriekšējo rakstu adrešu gadījumā tiek veidotas atšķirīgas adreses ar dokumenta ID; paši raksti netiek pārrakstīti.
+
+Ja hostinga panelī jau ir iestatīts vecais `VITE_SANITY_PROJECT_ID`, nomainiet to uz `sxvw8jh8`; `VITE_SANITY_STUDIO_URL` jābūt `https://izaugtmilestiba-sxvw8jh8.sanity.studio`. Pēc šo divu build mainīgo maiņas vajadzīgs viens Redeploy.

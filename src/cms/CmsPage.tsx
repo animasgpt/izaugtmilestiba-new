@@ -59,9 +59,10 @@ function RenderPage() {
     const documentId = target.closest<HTMLElement>('[data-cms-document]')?.dataset.cmsDocument;
     if (!documentId) return;
     event.preventDefault(); event.stopPropagation();
-    const sourcePath = section ? `sections[_key=="${section}"]${item ? `.items[_key=="${item}"]` : ''}${field ? '.' + field : ''}` : field || '';
+    const sourceType = target.closest<HTMLElement>('[data-cms-source-type]')?.dataset.cmsSourceType;
+    const sourcePath = sourceType === 'article' ? (field === 'image' ? 'coverImage' : field === 'subtitle' ? 'excerpt' : field === 'eyebrow' ? 'category' : field || '') : section ? `sections[_key=="${section}"]${item ? `.items[_key=="${item}"]` : ''}${field ? '.' + field : ''}` : field || '';
     const origin = new URL(import.meta.env.VITE_SANITY_STUDIO_URL || snapshot.settings?.studioUrl || 'http://localhost:3333').origin;
-    window.parent.postMessage({ type: 'cms:edit', id: documentId, schemaType: documentId === 'siteSettings' ? 'siteSettings' : 'page', path: sourcePath }, origin);
+    window.parent.postMessage({ type: 'cms:edit', id: documentId, schemaType: sourceType === 'article' ? 'article' : documentId === 'siteSettings' ? 'siteSettings' : 'page', path: sourcePath }, origin);
   };
   const vars = { ...themeVariables(snapshot.settings?.theme), '--cms-logo-width': `${Math.max(24, Math.min(260, snapshot.settings?.logoWidth || 48))}px` } as CSSProperties;
   return <div className={'cms-site' + (editing && preview ? ' cms-inspecting' : '')} style={vars} onClickCapture={inspect}>

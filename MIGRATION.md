@@ -10,7 +10,7 @@ Bezmaksas komerciālās vietnes hostingam izmantojiet Cloudflare Pages; aktuāli
 | Kontaktformas pieteikumi | Supabase `contact_submissions` | Jaunais Supabase |
 | Rediģējamais saturs | Supabase `site_content` | Jaunais Supabase |
 | Lietotāji un lomas | Supabase Auth + `user_roles` | Auth izveido no jauna; lomas sasaista pēc e-pasta |
-| Hero teksts un cenas | Sanity `vl2g5s69`, `production` | Esošais Sanity vai jūsu jaunais Sanity |
+| Hero teksts un cenas | Sanity `sxvw8jh8`, `production` | Esošais Sanity vai jūsu jaunais Sanity |
 
 Vecā Supabase projekta atsauce: `skrrmbaewrhcfvevamwi`.
 Kodā nav Storage vai Edge Functions izsaukumu. Dzīvās DB struktūra, Auth
@@ -73,7 +73,7 @@ Lielai DB izmantojiet pilnu dump/restore, nevis vienu SQL Editor rezultāta lauk
 | --- | --- |
 | `VITE_SUPABASE_URL` | Jaunā projekta URL no Supabase Connect/API skata |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | Jaunā projekta publishable vai legacy anon key |
-| `VITE_SANITY_PROJECT_ID` | `vl2g5s69` vai jaunā Sanity projekta ID |
+| `VITE_SANITY_PROJECT_ID` | `sxvw8jh8` vai jaunā Sanity projekta ID |
 | `VITE_SANITY_DATASET` | `production` vai jaunais dataset |
 
 Supabase mainīgie ir obligāti. **Nekad nelieciet `service_role`, DB paroli vai

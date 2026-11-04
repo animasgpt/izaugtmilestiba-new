@@ -19,7 +19,7 @@ function Intro({ section, hero }: { section: CmsSection; hero?: boolean }) {
   </>;
 }
 function SectionContent({ section }: { section: CmsSection }) {
-  const { snapshot: { settings }, preview } = useCms();
+  const { snapshot: { settings, articles: snapshotArticles }, preview } = useCms();
   const intro = <Intro section={section} hero={section._type === 'heroSection'} />;
   switch (section._type) {
     case 'heroSection':
@@ -43,6 +43,12 @@ function SectionContent({ section }: { section: CmsSection }) {
           {item.link && <CmsAnchor link={item.link} className="cms-button cms-button--secondary" />}
         </div></article>)}
     </div><CmsButtons buttons={section.buttons} /></>;
+    case 'articleListSection': return <>{intro}<div className={'cms-grid cms-grid--' + (section.columns || 3)}>
+      {snapshotArticles?.map(article => <article className="cms-card" key={article._id}>
+        <CmsPicture image={article.coverImage} /><div className="cms-card-copy">{article.category && <p className="cms-eyebrow">{article.category}</p>}<h3>{article.title}</h3>
+          <p>{article.excerpt}</p><CmsAnchor link={{ label: section.articleLinkLabel || 'Lasīt rakstu', kind: 'page', page: { _ref: article._id } }} className="cms-button cms-button--outline" />
+        </div></article>)}
+    </div></>;
     case 'gallerySection': return <>{intro}<div className={'cms-grid cms-grid--' + (section.columns || 3) + ' cms-gallery cms-ratio--' + (section.imageRatio || 'landscape')}>
       {section.items?.map(item => <figure key={item._key} data-cms-item={item._key}><div data-cms-path="image"><CmsPicture image={item.image} /></div>
         {(item.image?.caption || item.title) && <figcaption>{item.image?.caption || item.title}</figcaption>}</figure>)}
@@ -68,7 +74,7 @@ function SectionContent({ section }: { section: CmsSection }) {
 }
 export function CmsSections({ page }: { page: CmsPage }) {
   return <main>{page.sections?.filter(section => !section.hidden).map(section => <section key={section._key}
-    id={section.anchor || undefined} data-cms-document={page._id} data-cms-section={section._key}
+    id={section.anchor || undefined} data-cms-document={page._id} data-cms-source-type={page.sourceType} data-cms-section={section._key}
     className={['cms-section', 'cms-section--' + section._type, 'cms-bg--' + (section.style?.background || 'background'),
       'cms-padding--' + (section._type === 'spacerSection' ? 'none' : section.style?.padding || 'large'),
       'cms-align--' + (section.style?.align || 'left')].join(' ')} style={sectionStyle(section)}>

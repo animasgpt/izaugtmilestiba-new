@@ -11,11 +11,13 @@ async function main() {
   const root = fileURLToPath(new URL('../../', import.meta.url));
   const docs = await client.fetch<Record<string, unknown>[]>('*[_type in ["page", "siteSettings"]]', {}, { perspective: 'raw' });
   await mkdir(path.join(root, 'backups'), { recursive: true });
-  const backup = path.join(root, 'backups', `sanity-before-builder-${new Date().toISOString().replace(/[:.]/g, '-')}.json`);
+  const backup = path.join(root, 'backups', `sanity-${client.config().projectId}-before-builder-${new Date().toISOString().replace(/[:.]/g, '-')}.json`);
   await writeFile(backup, JSON.stringify(docs, null, 2), 'utf8');
   console.log('Existing page/settings documents backed up locally.');
   const legacy = (docs.find(doc => doc._id === 'siteSettings') || docs.find(doc => doc._type === 'siteSettings' && !String(doc._id).startsWith('drafts.'))) as SiteSettings | undefined;
   const seed = structuredClone(defaultSnapshot);
+  const articleCount = await client.fetch<number>('count(*[_type == \"article\"])');
+  if (articleCount > 0) seed.pages.push({ _id: 'page-articles', _type: 'page', title: 'Raksti', slug: { current: 'raksti' }, sections: [{ _key: 'articles', _type: 'articleListSection', title: 'Raksti', columns: 3 }] });
   const home = seed.pages.find(page => page._id === 'page-home')!;
   const hero = home.sections!.find(section => section._key === 'hero')!;
   if (legacy?.heroTitle) hero.title = legacy.heroTitle;
@@ -44,13 +46,13 @@ async function main() {
   const content = convert(seed) as typeof seed;
   const { _id, _type, ...defaults } = content.settings!;
   const cleanLegacy = Object.fromEntries(Object.entries(legacy || {}).filter(([key]) => !key.startsWith('_')));
-  const studioUrl = `https://${process.env.SANITY_STUDIO_HOST || 'izaugtmilestiba-redaktors'}.sanity.studio`;
+  const studioUrl = `https://${process.env.SANITY_STUDIO_HOST || 'izaugtmilestiba-sxvw8jh8'}.sanity.studio`;
   const initialSettings = { ...defaults, ...cleanLegacy, builderVersion: 1, studioUrl };
   const transaction = client.transaction();
   transaction.createIfNotExists({ _id: 'siteSettings', _type: 'siteSettings', ...initialSettings });
-  transaction.patch('siteSettings', patch => patch.setIfMissing({ ...defaults, builderVersion: 1, studioUrl }));
+  transaction.patch('siteSettings', patch => patch.setIfMissing({ ...defaults, builderVersion: 1, studioUrl }).set({ studioUrl }));
   if (docs.some(doc => doc._id === 'drafts.siteSettings')) {
-    transaction.patch('drafts.siteSettings', patch => patch.setIfMissing({ ...defaults, builderVersion: 1, studioUrl }));
+    transaction.patch('drafts.siteSettings', patch => patch.setIfMissing({ ...defaults, builderVersion: 1, studioUrl }).set({ studioUrl }));
   }
   for (const page of content.pages) {
     if (docs.some(doc => doc._id === 'drafts.' + page._id)) {
