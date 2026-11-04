@@ -128,7 +128,6 @@ Lovable atslēgšanu/dzēšanu veiciet pēc datu saskaņošanas un rezerves kopi
   kontrolsummas, anonīmas piekļuves aizliegumi un admina piekļuve pārbaudīti.
   Auth shēma testā bija minimāla imitācija; reālā Supabase Auth un Vercel vēl jāpārbauda jaunajā kontā.
 - Pārbaudes darbinātas ar Node 24 šajā datorā; Vercel konfigurācijai norādīts Node 22.
-- Pilns lint pašreiz atrod 4 kļūdas nemainītajos failos: `command.tsx`,
-  `textarea.tsx`, `AdminLogin.tsx`, `tailwind.config.ts`, kā arī 7 brīdinājumus.
+- Pilnā lint pārbaude iziet bez kļūdām. Paliek Fast Refresh brīdinājumi, kas pārbaudi nebloķē.
 - `npm ci` ziņo par 28 esošo atkarību ievainojamībām (t.sk. 2 critical).
   Atkarību drošības atjaunināšana jāplāno atsevišķi; šī migrācija tās neatrisina.

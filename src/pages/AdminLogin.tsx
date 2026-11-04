@@ -62,7 +62,7 @@ const AdminLogin = () => {
           toast.error("Nav administratora tiesību");
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Login error:", error);
       toast.error("Nepareizs e-pasts vai parole");
     } finally {

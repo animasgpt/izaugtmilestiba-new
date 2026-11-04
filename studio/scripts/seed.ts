@@ -16,7 +16,7 @@ async function main() {
   console.log('Existing page/settings documents backed up locally.');
   const legacy = (docs.find(doc => doc._id === 'siteSettings') || docs.find(doc => doc._type === 'siteSettings' && !String(doc._id).startsWith('drafts.'))) as SiteSettings | undefined;
   const seed = structuredClone(defaultSnapshot);
-  const articleCount = await client.fetch<number>('count(*[_type == \"article\"])');
+  const articleCount = await client.fetch<number>('count(*[_type == "article"])');
   if (articleCount > 0) seed.pages.push({ _id: 'page-articles', _type: 'page', title: 'Raksti', slug: { current: 'raksti' }, sections: [{ _key: 'articles', _type: 'articleListSection', title: 'Raksti', columns: 3 }] });
   const home = seed.pages.find(page => page._id === 'page-home')!;
   const hero = home.sections!.find(section => section._key === 'hero')!;

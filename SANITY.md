@@ -122,7 +122,7 @@ Avoti: [Sanity Free](https://www.sanity.io/pricing), [Studio shēmas](https://ww
 
 Frontend un Studio produkcijas kompilācija, abas TypeScript pārbaudes un 26 Vitest testi. Sanity shēmu validācijā un vietnes dokumentu un esošo rakstu validācijā nav kļūdu vai brīdinājumu. Pārlūkā pārbaudīts reālais publicētais Sanity saturs, mobilā izvēlne un izkārtojums bez horizontālas ritināšanas. Atsevišķā iframe pārbaudīti melnrakstu atjauninājumi, jaunas apakšlapas navigācija, klikšķa avota lauks, sveša origin noraidīšana un formas sūtīšanas bloķēšana priekšskatījumā.
 
-Pilnajā repozitorija lint pārbaudē paliek iepriekšējās 4 kļūdas nemainītajos failos. Jaunajam CMS kodam lint kļūdu nav; ir divi Fast Refresh organizācijas brīdinājumi. Dzīvā kontaktforma ar jaunā Supabase konta atslēgām jāpārbauda pēc hostinga pieslēgšanas.
+Pilnā repozitorija lint pārbaude iziet bez kļūdām; paliek 9 Fast Refresh brīdinājumi, kas pārbaudi nebloķē. Dzīvā kontaktforma ar jaunā Supabase konta atslēgām jāpārbauda pēc hostinga pieslēgšanas.
 
 ## Izvēlētais projekts sxvw8jh8
 
