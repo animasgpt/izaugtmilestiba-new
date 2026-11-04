@@ -8,6 +8,7 @@
     "deploy": "sanity deploy",
     "typecheck": "tsc --noEmit",
     "seed": "sanity exec scripts/seed.ts --with-user-token",
+    "upgrade:builder": "sanity exec scripts/upgrade-builder.ts --with-user-token",
     "check:access": "sanity projects list"
   },
   "dependencies": {

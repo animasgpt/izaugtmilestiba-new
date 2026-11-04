@@ -2,6 +2,7 @@ import { defineArrayMember, defineField, defineType, type FieldDefinition, type 
 import { ColorInput } from '../components/ColorInput';
 import { pagePath } from '../../cms/routing';
 import type { CmsPage } from '../../cms/model';
+import { fontOptions, iconOptions } from '../../cms/design';
 
 const apiVersion = '2026-09-10';
 const string = (name: string, title: string) => defineField({ name, title, type: 'string' });
@@ -12,7 +13,6 @@ const color = (name: string, title: string) => defineField({ name, title, type: 
   description: 'Izvēlieties krāsu vai ierakstiet HEX kodu. Izdzēšot vērtību, atjaunosies sākotnējā krāsa.',
   validation: rule => rule.regex(/^#[\da-f]{6}$/i, { name: 'HEX krāsa (#RRGGBB)' }) });
 const choices = (name: string, title: string, values: { title: string; value: string }[]) => defineField({ name, title, type: 'string', options: { list: values, layout: 'radio' } });
-const groupFields = (fields: FieldDefinition[], group: string) => fields.map(field => ({ ...field, group }));
 const columns = defineField({ name: 'columns', title: 'Kolonnu skaits datorā', type: 'number', initialValue: 3,
   options: { list: [{ title: 'Viena', value: 1 }, { title: 'Divas', value: 2 }, { title: 'Trīs', value: 3 }, { title: 'Četras', value: 4 }] },
   description: 'Telefonā izkārtojums pielāgojas automātiski.' });
@@ -31,7 +31,7 @@ const cmsLink = defineType({ name: 'cmsLink', title: 'Saite vai poga', type: 'ob
     }) },
   defineField({ name: 'anchor', title: 'Sadaļas enkurs', type: 'string', description: 'Sadaļas iestatījumos ierakstītais enkurs, piemēram, contact. Bez #.', hidden: ({ parent }) => parent?.kind === 'url',
     validation: rule => rule.regex(/^[a-z][a-z0-9-]*$/, { name: 'enkurs bez atstarpēm' }) }),
-  choices('variant', 'Pogas izskats', [{ title: 'Galvenā krāsa', value: 'primary' }, { title: 'Otrā krāsa', value: 'secondary' }, { title: 'Tikai kontūra', value: 'outline' }]),
+  choices('variant', 'Pogas izskats', [{ title: 'Galvenā krāsa', value: 'primary' }, { title: 'Otrā krāsa', value: 'secondary' }, { title: 'Tikai kontūra', value: 'outline' }, { title: 'Teksta poga', value: 'ghost' }]),
   defineField({ name: 'newTab', title: 'Atvērt jaunā cilnē', type: 'boolean', initialValue: false }),
 ], initialValue: { kind: 'url', variant: 'primary' }, preview: { select: { title: 'label', subtitle: 'href' } } });
 const navigationLink = defineType({ name: 'navigationLink', title: 'Izvēlnes saite', type: 'object', fields: [
@@ -41,21 +41,27 @@ const siteImage = defineType({ name: 'siteImage', title: 'Attēls', type: 'image
   defineField({ name: 'alt', title: 'Attēla apraksts', type: 'string', description: 'Īss apraksts cilvēkiem, kuri attēlu neredz, un meklētājiem.', validation: rule => rule.required().warning('Pievienojiet aprakstu pieejamībai.') }),
   string('caption', 'Paraksts zem attēla (galerijā)'),
 ], description: 'Augšupielādējiet jaunu attēlu vai izvēlieties jau augšupielādētu. Ar Crop / Hotspot nosakiet redzamo daļu.' });
-const richText = defineType({ name: 'richText', title: 'Formatēts teksts', type: 'array', of: [defineArrayMember({ type: 'block',
-  styles: [{ title: 'Paragrāfs', value: 'normal' }, { title: 'Apakšvirsraksts', value: 'h2' }, { title: 'Mazs virsraksts', value: 'h3' }, { title: 'Citāts', value: 'blockquote' }],
+const inlineCtaButton = defineType({ name: 'inlineCtaButton', title: 'Poga tekstā', type: 'object', fields: cmsLink.fields!, preview: cmsLink.preview, initialValue: { kind: 'url', variant: 'primary' } });
+const richText = defineType({ name: 'richText', title: 'Teksts ar formatēšanu', type: 'array', of: [defineArrayMember({ type: 'block',
+  styles: [{ title: 'Paragrāfs', value: 'normal' }, { title: 'Galvenais virsraksts (H1)', value: 'h1' }, { title: 'Virsraksts (H2)', value: 'h2' }, { title: 'Apakšvirsraksts (H3)', value: 'h3' }, { title: 'Mazais virsraksts (H4)', value: 'h4' }, { title: 'Liels ievadteksts', value: 'lead' }, { title: 'Citāts', value: 'blockquote' }],
   lists: [{ title: 'Punkti', value: 'bullet' }, { title: 'Numurēts saraksts', value: 'number' }],
-  marks: { decorators: [{ title: 'Treknraksts', value: 'strong' }, { title: 'Slīpraksts', value: 'em' }, { title: 'Pasvītrots', value: 'underline' }],
-    annotations: [{ name: 'link', title: 'Saite', type: 'object', fields: [href] }] },
-})] });
+  of: [{ type: 'inlineCtaButton' }],
+  marks: { decorators: [{ title: 'Treknraksts', value: 'strong' }, { title: 'Slīpraksts', value: 'em' }, { title: 'Pasvītrots', value: 'underline' }, { title: 'Pārsvītrots', value: 'strike-through' }, { title: 'Akcenta krāsa', value: 'highlight' }],
+    annotations: [
+      { name: 'link', title: 'Ārējā saite', type: 'object', fields: [href, defineField({ name: 'blank', title: 'Atvērt jaunā cilnē', type: 'boolean', initialValue: false })] },
+      { name: 'internalLink', title: 'Saite uz vietnes lapu', type: 'object', fields: [defineField({ name: 'page', title: 'Lapa', type: 'reference', to: [{ type: 'page' }], validation: rule => rule.required() }), string('anchor', 'Sadaļas enkurs (bez #)')] },
+      { name: 'buttonLink', title: 'Pārvērst tekstu par pogu', type: 'object', fields: cmsLink.fields! },
+    ] },
+}), defineArrayMember({ type: 'inlineCtaButton' })] });
 const sectionStyle = defineType({ name: 'sectionStyle', title: 'Sadaļas dizains', type: 'object', fields: [
-  choices('background', 'Fons', [{ title: 'Lapas fons', value: 'background' }, { title: 'Gaišais fons', value: 'card' }, { title: 'Akcenta fons', value: 'accent' }, { title: 'Galvenā krāsa', value: 'primary' }, { title: 'Izvēlēties krāsu', value: 'custom' }]),
+  choices('background', 'Fons', [{ title: 'Lapas fons', value: 'background' }, { title: 'Gaišais fons', value: 'card' }, { title: 'Tumšais fons', value: 'dark' }, { title: 'Akcenta fons', value: 'accent' }, { title: 'Galvenā krāsa', value: 'primary' }, { title: 'Izvēlēties krāsu', value: 'custom' }]),
   { ...color('backgroundColor', 'Sadaļas fona krāsa'), hidden: ({ parent }) => parent?.background !== 'custom' },
   color('textColor', 'Sadaļas teksta krāsa'),
   choices('padding', 'Brīvā vieta virs un zem', [{ title: 'Mazāk', value: 'small' }, { title: 'Vidēji', value: 'medium' }, { title: 'Vairāk', value: 'large' }]),
   choices('width', 'Satura platums', [{ title: 'Šaurs — lasīšanai', value: 'narrow' }, { title: 'Standarta', value: 'normal' }, { title: 'Plašs', value: 'wide' }]),
   choices('align', 'Teksta līdzinājums', [{ title: 'Pa kreisi', value: 'left' }, { title: 'Centrā', value: 'center' }]),
 ] });
-const contentCard = defineType({ name: 'contentCard', title: 'Kartīte', type: 'object', fields: [string('title', 'Nosaukums'), defineField({ name: 'text', title: 'Īss apraksts', type: 'text', rows: 3 }), rich(), image(), string('price', 'Cena vai papildu izcēlums'), defineField({ name: 'link', title: 'Poga', type: 'cmsLink' })], preview: { select: { title: 'title', media: 'image', subtitle: 'price' } } });
+const contentCard = defineType({ name: 'contentCard', title: 'Kartīte', type: 'object', fields: [choices('icon', 'Ikona', iconOptions), string('title', 'Nosaukums'), defineField({ name: 'text', title: 'Īss apraksts', type: 'text', rows: 3 }), rich(), image(), string('price', 'Cena vai papildu izcēlums'), defineField({ name: 'link', title: 'Poga', type: 'cmsLink' })], preview: { select: { title: 'title', media: 'image', subtitle: 'price' } } });
 const galleryItem = defineType({ name: 'galleryItem', title: 'Galerijas attēls', type: 'object', fields: [image(), string('title', 'Attēla paraksts')], preview: { select: { title: 'title', media: 'image' } } });
 const faqItem = defineType({ name: 'faqItem', title: 'Jautājums un atbilde', type: 'object', fields: [string('title', 'Jautājums'), rich('body', 'Atbilde')], preview: { select: { title: 'title' } } });
 const testimonial = defineType({ name: 'testimonial', title: 'Atsauksme', type: 'object', fields: [defineField({ name: 'text', title: 'Atsauksmes teksts', type: 'text', rows: 4 }), string('author', 'Autors'), string('role', 'Papildu apraksts'), image()], preview: { select: { title: 'author', subtitle: 'text', media: 'image' } } });
@@ -70,23 +76,25 @@ const contactSettings = defineType({ name: 'contactSettings', title: 'Kontaktfor
   defineField({ name: 'privacyLink', title: 'Privātuma politikas saite', type: 'cmsLink' }),
 ], validation: rule => rule.custom(value => value?.requireConsent && !value.consentText ? 'Obligātai piekrišanai vajadzīgs redzamais teksts.' : true) });
 const commonSectionFields: FieldDefinition[] = [
-  defineField({ name: 'label', title: 'Sadaļas nosaukums redaktorā', type: 'string', group: 'content', description: 'Tikai Jūsu ērtībai. Nav redzams publiskajā lapā.' }),
-  defineField({ name: 'anchor', title: 'Enkurs / sadaļas adrese', type: 'string', group: 'content', description: 'Piemēram, contact. Var izmantot izvēlnēs un pogās. Vienā lapā nedrīkst atkārtoties.', validation: rule => rule.regex(/^[a-z][a-z0-9-]*$/) }),
-  defineField({ name: 'hidden', title: 'Paslēpt šo sadaļu', type: 'boolean', group: 'content', initialValue: false }),
+  defineField({ name: 'label', title: 'Sadaļas nosaukums redaktorā', type: 'string', group: 'advanced', description: 'Tikai Jūsu ērtībai. Nav redzams publiskajā lapā.' }),
+  defineField({ name: 'anchor', title: 'Enkurs / sadaļas adrese', type: 'string', group: 'advanced', description: 'Piemēram, contact. Var izmantot izvēlnēs un pogās. Vienā lapā nedrīkst atkārtoties.', validation: rule => rule.regex(/^[a-z][a-z0-9-]*$/) }),
+  defineField({ name: 'hidden', title: 'Paslēpt šo sadaļu', type: 'boolean', group: 'advanced', initialValue: false }),
   defineField({ name: 'style', title: 'Dizains un atstarpes', type: 'sectionStyle', group: 'layout' }),
 ];
 const introFields = [string('eyebrow', 'Mazais ievadteksts'), string('title', 'Virsraksts'), defineField({ name: 'subtitle', title: 'Apakšvirsraksts', type: 'text', rows: 2 }), rich()];
 function section(name: string, title: string, fields: FieldDefinition[]) {
-  return defineType({ name, title, type: 'object', groups: [{ name: 'content', title: 'Saturs', default: true }, { name: 'layout', title: 'Izkārtojums un dizains' }],
-    fields: [...commonSectionFields, ...groupFields(fields, 'content')],
+  return defineType({ name, title, type: 'object', groups: [{ name: 'content', title: 'Saturs', default: true }, { name: 'layout', title: 'Dizains un izkārtojums' }, { name: 'advanced', title: 'Papildus' }],
+    fields: [...commonSectionFields, ...fields.map(field => ({ ...field, group: ['layout', 'imagePosition', 'imageFit', 'columnRatio', 'columns', 'imageRatio', 'height'].includes(field.name) ? 'layout' : 'content' }))],
     initialValue: { style: { background: 'background', padding: 'large', width: 'normal', align: 'left' } },
     preview: { select: { label: 'label', title: 'title', hidden: 'hidden', media: 'image' }, prepare: ({ label, title: heading, hidden, media }) => ({ title: `${hidden ? '🙈 ' : ''}${label || heading || title}`, subtitle: title, media }) },
   });
 }
 const itemArray = (type: string, title: string) => defineField({ name: 'items', title, type: 'array', of: [{ type }] });
 const imagePosition = choices('imagePosition', 'Kur atrodas attēls?', [{ title: 'Pa kreisi', value: 'left' }, { title: 'Pa labi', value: 'right' }]);
+const columnRatio = choices('columnRatio', 'Teksta / medija platums datorā', [{ title: 'Vienāds platums (50 / 50)', value: '50-50' }, { title: 'Plašāks teksts (60 / 40)', value: '60-40' }, { title: 'Plašāks medijs (40 / 60)', value: '40-60' }]);
+const mediaFields = [...introFields, image(), defineField({ name: 'video', title: 'Video (MP4 vai WebM)', type: 'file', options: { accept: 'video/mp4,video/webm' }, description: 'Ja pievienots, video aizstāj attēlu. Attēls kļūst par video vāku.' }), imagePosition, columnRatio, choices('imageFit', 'Attēla aizpildījums', [{ title: 'Aizpildīt laukumu', value: 'cover' }, { title: 'Rādīt visu attēlu', value: 'contain' }]), links()];
 const sections = [
-  section('heroSection', 'Ievads / lielais virsraksts', [...introFields, image(), choices('layout', 'Izkārtojums', [{ title: 'Teksts un attēls blakus', value: 'split' }, { title: 'Viss centrā', value: 'center' }, { title: 'Attēls fonā', value: 'background' }]), imagePosition, links()]),
+  section('heroSection', 'Ievads / lielais virsraksts', [...introFields, image(), choices('layout', 'Izkārtojums', [{ title: 'Teksts un attēls blakus', value: 'split' }, { title: 'Viss centrā', value: 'center' }, { title: 'Attēls fonā', value: 'background' }]), imagePosition, columnRatio, { ...links(), validation: rule => rule.max(2) }]),
   section('textSection', 'Teksts', [...introFields, links()]),
   section('imageTextSection', 'Attēls un teksts', [...introFields, image(), imagePosition, choices('imageFit', 'Attēla aizpildījums', [{ title: 'Aizpildīt laukumu', value: 'cover' }, { title: 'Rādīt visu attēlu', value: 'contain' }]), links()]),
   section('cardsSection', 'Pakalpojumi / kartītes', [...introFields, itemArray('contentCard', 'Kartītes — pārvelciet, lai mainītu secību'), columns, links()]),
@@ -98,6 +106,10 @@ const sections = [
   section('statsSection', 'Skaitļi un sasniegumi', [...introFields, itemArray('statistic', 'Skaitļi'), columns]),
   section('articleListSection', 'Rakstu saraksts', [...introFields, columns, string('articleLinkLabel', 'Raksta pogas teksts')]),
   section('spacerSection', 'Brīva vieta', [defineField({ name: 'height', title: 'Augstums (pikseļos)', type: 'number', initialValue: 48, validation: rule => rule.min(0).max(240) })]),
+  section('textAndMediaSection', 'Teksts un medijs', mediaFields),
+  section('featuresSection', 'Priekšrocības / ikonu režģis', [...introFields, itemArray('contentCard', 'Priekšrocības'), columns, links()]),
+  section('quoteSection', 'Izcelts citāts', [defineField({ name: 'quote', title: 'Citāts', type: 'text', rows: 4 }), string('author', 'Autors'), string('role', 'Loma vai papildu apraksts'), image('image', 'Autora foto')]),
+  section('ctaBanner', 'Pilna platuma aicinājuma baneris', [...introFields, image('image', 'Fona attēls'), links()]),
 ];
 const seo = defineType({ name: 'seoSettings', title: 'Meklētāji un kopīgošana', type: 'object', fields: [string('title', 'Virsraksts pārlūka cilnē / Google'), defineField({ name: 'description', title: 'Apraksts', type: 'text', rows: 3, validation: rule => rule.max(180).warning('Ieteicams līdz 180 zīmēm.') }), image('image', 'Attēls kopīgošanai'), defineField({ name: 'noIndex', title: 'Nerādīt lapu meklētājos', type: 'boolean', description: 'Lapa joprojām būs publiski pieejama pēc adreses. Šis iestatījums neierobežo piekļuvi.' })] });
 const page = defineType({ name: 'page', title: 'Lapa', type: 'document', groups: [{ name: 'content', title: 'Saturs', default: true }, { name: 'address', title: 'Adrese un apakšlapa' }, { name: 'seo', title: 'Google un kopīgošana' }], fields: [
@@ -108,9 +120,10 @@ const page = defineType({ name: 'page', title: 'Lapa', type: 'document', groups:
     validation: rule => rule.custom((value, context) => context.document?._id?.replace(/^drafts\./, '') === 'page-home' || /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value?.current || '') || 'Ievadiet adresi vai nospiediet Generate.') }),
   defineField({ name: 'parent', title: 'Vecāklapa (apakšlapām)', type: 'reference', to: [{ type: 'page' }], group: 'address', description: 'Atstājiet tukšu galvenā līmeņa lapai. Piemērs: Konsultācijas → Attālināti dod /konsultacijas/attalinati.',
     hidden: ({ document }) => document?._id?.replace(/^drafts\./, '') === 'page-home', options: { filter: ({ document }) => ({ filter: '!(_id in [$id, $draft])', params: { id: document._id.replace(/^drafts\./, ''), draft: 'drafts.' + document._id.replace(/^drafts\./, '') } }) } }),
-  defineField({ name: 'sections', title: 'Lapas sadaļas', description: 'Pievienojiet sadaļu, dublējiet to vai pārvelciet citā vietā. Katras sadaļas cilnē ir dizaina iestatījumi.', type: 'array', group: 'content', of: sections.map(s => ({ type: s.name })),
-    options: { insertMenu: { filter: true, views: [{ name: 'grid', previewImageUrl: type => `/static/blocks/${type}.svg` }, { name: 'list' }] } },
+  defineField({ name: 'pageBuilder', title: 'Lapas konstruktors', description: 'Pievienojiet, kopējiet, dzēsiet vai pārvelciet blokus. Katrā blokā: Saturs, Dizains un izkārtojums, Papildus.', type: 'array', group: 'content', of: sections.map(s => ({ type: s.name })),
+    options: { insertMenu: { filter: true, views: [{ name: 'grid', previewImageUrl: type => `/static/blocks/${({ textAndMediaSection: 'imageTextSection', featuresSection: 'cardsSection', quoteSection: 'testimonialsSection', ctaBanner: 'ctaSection' } as Record<string, string>)[type] || type}.svg` }, { name: 'list' }] } },
     validation: rule => rule.custom(value => { const anchors = (value || []).map(s => (s as { anchor?: string }).anchor).filter(Boolean); return new Set(anchors).size === anchors.length || 'Divām sadaļām ir vienāds enkurs. Mainiet vienu no tiem.'; }) }),
+  defineField({ name: 'sections', title: 'Iepriekšējās sadaļas (rezerves kopija)', type: 'array', of: sections.map(s => ({ type: s.name })), hidden: true, readOnly: true }),
   defineField({ name: 'seo', title: 'Google un kopīgošana', type: 'seoSettings', group: 'seo' }),
   defineField({ name: 'hideHeader', title: 'Paslēpt galveni šajā lapā', type: 'boolean', group: 'content' }),
   defineField({ name: 'hideFooter', title: 'Paslēpt kājeni šajā lapā', type: 'boolean', group: 'content' }),
@@ -128,8 +141,8 @@ const page = defineType({ name: 'page', title: 'Lapa', type: 'document', groups:
   }),
 });
 const themeFields = [color('background', 'Lapas fons'), color('foreground', 'Pamatteksts'), color('primary', 'Galvenā krāsa / galvenās pogas'), color('primaryForeground', 'Teksts uz galvenās krāsas'), color('secondary', 'Otrā krāsa / otrās pogas'), color('secondaryForeground', 'Teksts uz otrās krāsas'), color('card', 'Kartīšu un gaišo sadaļu fons'), color('accent', 'Akcenta fons'), color('border', 'Līnijas un lauku apmales'),
-  choices('headingFont', 'Virsrakstu fonts', ['Playfair Display','Lato','Georgia','Arial','Source Code Pro'].map(value => ({ title: value, value }))),
-  choices('bodyFont', 'Teksta fonts', ['Lato','Playfair Display','Georgia','Arial','Source Code Pro'].map(value => ({ title: value, value }))),
+  choices('headingFont', 'Virsrakstu fonts', fontOptions),
+  choices('bodyFont', 'Teksta fonts', fontOptions),
   defineField({ name: 'radius', title: 'Stūru noapaļojums (px)', type: 'number', validation: rule => rule.min(0).max(40) }),
   defineField({ name: 'contentWidth', title: 'Satura maksimālais platums (px)', type: 'number', validation: rule => rule.min(720).max(1600) }),
   choices('buttonStyle', 'Pogu forma', [{ title: 'Noapaļota', value: 'rounded' }, { title: 'Ovāla', value: 'pill' }, { title: 'Taisni stūri', value: 'square' }]),
@@ -148,10 +161,15 @@ const siteSettings = defineType({ name: 'siteSettings', title: 'Vietnes iestatī
     defineField({ name: 'button', title: 'Izcelta poga galvenē', type: 'cmsLink' }),
   ] }),
   defineField({ name: 'footer', title: 'Kājene', type: 'object', group: 'footer', fields: [color('backgroundColor', 'Kājenes fons'), color('textColor', 'Kājenes teksta krāsa'), defineField({ name: 'showTitle', title: 'Rādīt virsrakstu kājenē', type: 'boolean', initialValue: true }), string('title', 'Virsraksts'), defineField({ name: 'text', title: 'Apraksts', type: 'text', rows: 3 }), image('logo', 'Cits logo kājenei'), defineField({ name: 'showLogo', title: 'Rādīt logo kājenē', type: 'boolean' }),
+    defineField({ name: 'companyDetails', title: 'Rekvizīti', type: 'text', rows: 5, description: 'Uzņēmuma nosaukums, reģistrācijas numurs, adrese, bankas rekvizīti vai cita publiska informācija.' }),
     defineField({ name: 'copyright', title: 'Autortiesību teksts', type: 'string', description: 'Lietojiet {year}, lai gads mainītos automātiski.' }),
     defineField({ name: 'columns', title: 'Saišu kolonnas', type: 'array', of: [{ type: 'object', name: 'footerColumn', title: 'Kolonna', fields: [string('title', 'Kolonnas virsraksts'), links('links', 'Saites')], preview: { select: { title: 'title' } } }] }), links('socialLinks', 'Sociālie tīkli un papildu saites'),
   ] }),
-  defineField({ name: 'theme', title: 'Vietnes dizains', type: 'object', group: 'design', fields: themeFields }),
+  defineField({ name: 'fontHeading', title: 'Virsrakstu fonts', type: 'string', options: { list: fontOptions }, group: 'design' }),
+  defineField({ name: 'fontBody', title: 'Pamatteksta fonts', type: 'string', options: { list: fontOptions }, group: 'design' }),
+  ...[color('primaryColor', 'Primārā krāsa'), color('accentColor', 'Akcenta krāsa'), color('backgroundColor', 'Lapas noklusējuma fons'), color('textColor', 'Lapas noklusējuma teksts')].map(field => ({ ...field, group: 'design' })),
+  { ...choices('buttonStyle', 'Pogu forma', [{ title: 'Kapsula — pilnībā apaļas', value: 'rounded-full' }, { title: 'Viegli noapaļotas', value: 'rounded-lg' }, { title: 'Asi stūri', value: 'rounded-none' }, { title: 'Iepriekšējais noapaļojums', value: 'rounded' }, { title: 'Ovāla (iepriekšējā vērtība)', value: 'pill' }, { title: 'Taisni stūri (iepriekšējā vērtība)', value: 'square' }]), group: 'design' },
+  defineField({ name: 'theme', title: 'Papildu dizains — kontrasts, platums un atstarpes', type: 'object', group: 'design', fields: themeFields.map(field => ['headingFont', 'bodyFont', 'primary', 'accent', 'background', 'foreground', 'buttonStyle'].includes(field.name) ? { ...field, hidden: true, readOnly: true } : field) }),
   { ...string('email', 'Publiskais e-pasts'), group: 'contact' }, { ...string('phone', 'Publiskais tālrunis'), group: 'contact' },
   defineField({ name: 'contact', title: 'Visu kontaktformu noklusētie teksti', type: 'contactSettings', group: 'contact' }),
   defineField({ name: 'siteUrl', title: 'Vietnes gala adrese', type: 'url', group: 'seo', description: 'Piemēram, https://www.izaugtmilestiba.lv. Vajadzīga kopīgošanai un meklētājiem.' }),
@@ -165,9 +183,9 @@ const article = defineType({ name: 'article', title: 'Raksts', type: 'document',
   defineField({ name: 'title', title: 'Virsraksts', type: 'string', validation: rule => rule.required() }),
   defineField({ name: 'slug', title: 'Adrese', type: 'slug', options: { source: 'title', isUnique: () => true } }),
   defineField({ name: 'excerpt', title: 'Īsais apraksts', type: 'text', rows: 3 }),
-  defineField({ name: 'body', title: 'Raksta teksts', type: 'array', of: [{ type: 'block' }] }),
+  defineField({ name: 'body', title: 'Raksta teksts', type: 'richText' }),
   defineField({ name: 'coverImage', title: 'Vāka attēls', type: 'image', options: { hotspot: true }, fields: [string('alt', 'Attēla apraksts')] }),
   string('category', 'Kategorija'), defineField({ name: 'publishedAt', title: 'Publicēšanas datums', type: 'datetime' }),
   defineField({ name: 'sourceUrl', title: 'Sākotnējā avota saite', type: 'url' }), string('sourceLinkLabel', 'Sākotnējā avota pogas teksts'),
 ], preview: { select: { title: 'title', media: 'coverImage', subtitle: 'category' } } });
-export const schemaTypes: SchemaTypeDefinition[] = [article, siteSettings, page, cmsLink, navigationLink, siteImage, richText, sectionStyle, contentCard, galleryItem, faqItem, testimonial, statistic, contactSettings, seo, ...sections];
+export const schemaTypes: SchemaTypeDefinition[] = [article, siteSettings, page, cmsLink, navigationLink, siteImage, inlineCtaButton, richText, sectionStyle, contentCard, galleryItem, faqItem, testimonial, statistic, contactSettings, seo, ...sections];

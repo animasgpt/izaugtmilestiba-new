@@ -1,8 +1,30 @@
 .cms-site { background:hsl(var(--background));color:hsl(var(--foreground));font-family:var(--cms-body-font);min-height:100vh; }
-.cms-site h1,.cms-site h2,.cms-site h3,.cms-brand,.cms-footer-title { font-family:var(--cms-heading-font); }
+.cms-site h1,.cms-site h2,.cms-site h3,.cms-site h4,.cms-brand,.cms-footer-title { font-family:var(--cms-heading-font); }
 .cms-site h1 { font-size:clamp(2.6rem,5vw,4.8rem);font-weight:700;line-height:1.12;letter-spacing:-.035em;margin-bottom:1.5rem; }
 .cms-site h2 { font-size:clamp(2rem,3.2vw,3.3rem);font-weight:600;line-height:1.2;letter-spacing:-.025em;margin-bottom:1.5rem; }
 .cms-site h3 { font-size:1.55rem;line-height:1.3;font-weight:600;margin-bottom:1rem; }
+.cms-site h4 { font-size:1.25rem;line-height:1.4;font-weight:600;margin-block:1.5rem .75rem; }
+.cms-bg--dark { background:#192620;color:#fff; }
+.cms-richtext .cms-lead { font-size:1.4em;line-height:1.6; }
+.cms-richtext .cms-text-highlight { color:hsl(var(--primary));background:transparent;font-weight:600; }
+.cms-richtext .cms-inline-button { text-decoration:none;font-size:1rem;margin:.35rem .25rem .35rem 0; }
+.cms-button--ghost { background:transparent;text-decoration:underline;text-underline-offset:5px;padding-inline:.25rem; }
+.cms-card-icon { width:2.5rem;height:2.5rem;color:hsl(var(--primary));margin-bottom:1.25rem; }
+.cms-feature.cms-ratio--60-40 { grid-template-columns:minmax(0,3fr) minmax(0,2fr); }
+.cms-feature.cms-ratio--40-60 { grid-template-columns:minmax(0,2fr) minmax(0,3fr); }
+.cms-feature.cms-ratio--60-40.cms-image--left { grid-template-columns:minmax(0,2fr) minmax(0,3fr); }
+.cms-feature.cms-ratio--40-60.cms-image--left { grid-template-columns:minmax(0,3fr) minmax(0,2fr); }
+.cms-feature-image video { width:100%;max-height:650px;border-radius:var(--radius); }
+.cms-single-quote { max-width:900px;margin:auto; }
+.cms-single-quote blockquote { font:italic clamp(1.6rem,3vw,2.8rem)/1.5 var(--cms-heading-font);white-space:pre-line; }
+.cms-single-quote figcaption { display:flex;align-items:center;gap:1.25rem;margin-top:2rem; }
+.cms-single-quote img { width:72px;height:72px;object-fit:cover;border-radius:50%; }
+.cms-section.cms-section--ctaBanner { padding-block:0; }
+.cms-section--ctaBanner > .cms-container { width:100%;max-width:none; }
+.cms-banner { background-size:cover;background-position:center; }
+.cms-banner-copy { max-width:950px; }
+.cms-align--center .cms-banner-copy { margin-inline:auto; }
+.cms-company-details { margin-top:1.5rem;font-size:.9rem; }
 .cms-site a,.cms-site button { transition:background-color .2s,opacity .2s,transform .2s; }
 .cms-site a:hover { opacity:.82; }
 .cms-site :focus-visible { outline:3px solid hsl(var(--primary));outline-offset:4px; }
@@ -71,7 +93,7 @@
  .cms-header-inner { min-height:74px;gap:1rem; }.cms-brand { font-size:1.15rem;max-width:85%; }.cms-logo { max-width:100px;max-height:65px; }
  .cms-mobile-toggle { display:flex;padding:.5rem; }.cms-navigation { display:none;position:absolute;top:100%;left:0;right:0;align-items:stretch;background:hsl(var(--background));padding:1.5rem;border-bottom:1px solid hsl(var(--border)); }.cms-navigation.is-open { display:flex;flex-direction:column;gap:1.2rem; }
  .cms-header--center .cms-header-inner { justify-content:space-between; }.cms-header--center .cms-navigation { width:auto; }.cms-nav-group > div { position:static;margin-top:.5rem;box-shadow:none; }
- .cms-feature { grid-template-columns:1fr;gap:2rem; }.cms-image--left .cms-feature-image { order:0; }.cms-feature-image img { max-height:600px; }.cms-feature--background { min-height:70vh;padding:2rem; }
+ .cms-feature,.cms-site .cms-feature[class*="cms-ratio--"] { grid-template-columns:1fr;gap:2rem; }.cms-image--left .cms-feature-image { order:0; }.cms-feature-image img { max-height:600px; }.cms-feature--background { min-height:70vh;padding:2rem; }
  .cms-grid { --columns:1;gap:1.5rem; }.cms-gallery.cms-grid--4,.cms-gallery.cms-grid--3,.cms-gallery.cms-grid--2 { --columns:2; }.cms-section--heroSection { min-height:0; }
  .cms-footer-top { flex-direction:column; }.cms-card-copy { padding:1.5rem; }
 }

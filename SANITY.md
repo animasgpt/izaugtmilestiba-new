@@ -137,3 +137,33 @@ Production build nolasa publicēto Sanity saturu un iekļauj to vietnē. Pirmaj�
 Rakstu sarakstā un sākumlapā netiek lejupielādēti visu rakstu pilnie teksti. Konkrētā raksta teksts tiek pieprasīts, atverot tā adresi; virsraksts un ievads ir pieejami jau sākotnējā kopijā. Studio melnrakstu priekšskatījums saglabā pilno rediģējamo saturu.
 
 Build nepieciešama piekļuve Sanity publicētajiem datiem; kļūmes gadījumā jaunā izvietošana apstājas, saglabājot iepriekšējo izvietojumu. Papildu mainīgie vai tokeni nav vajadzīgi.
+
+## Paplašinātais lapu un dizaina redaktors
+
+Sanity Studio projektā jau ir uzstādīta jaunāka versija par v3. Izmantotas tās pašas `defineType`, `defineField`, Portable Text un `structureTool` API; pakotne netiek pazemināta uz vecu versiju. Nav pievienoti maksas spraudņi.
+
+- `studio/schemaTypes/index.ts`: pilnas shēmas, `siteSettings` globālie fonti, krāsas un pogu forma; `page.pageBuilder`; iepriekšējie un jaunie bloki; Portable Text.
+- `studio/deskStructure.tsx`: Vispārīgie iestatījumi, Galvenā lapa, Sadaļas / Lapas un Raksti. Singletona veidošana, dublēšana un dzēšana no ikdienas saskarnes ierobežota.
+- `cms/design.ts`: drošs fontu un ikonu saraksts. Fontus izvēlas atsevišķi virsrakstiem un tekstam. Google Fonts adrese veidojas tikai no šī saraksta; izmantots `display=swap`.
+- `cms/normalize.ts`: kopīga lasīšanas saderība vecajiem `sections` / `theme` un jaunajiem `pageBuilder` / globālajiem dizaina laukiem. Skaidri tukšs `pageBuilder: []` paliek tukšs.
+- `src/cms/content.tsx`: H1–H4, ievadteksts, citāti, pasvītrojums, pārsvītrojums, akcenta krāsa, ārējās un iekšējās saites, teksta pogu anotācija un ievietojama inline poga. Ārējām jaunajām cilnēm lieto `noopener noreferrer`; nedrošas adreses netiek renderētas.
+- `src/cms/CmsSections.tsx`: hero, teksta/medija bloks ar 50/50, 60/40 un 40/60 proporcijām, kartītes/ikonas, citāts, pilna platuma CTA baneris un FAQ, kā arī iepriekšējie bloki. Video atbalsta augšupielādētus MP4/WebM ar vadīklām un bez automātiskas atskaņošanas.
+- `examples/next-app/layout.tsx`: servera layout piemērs Next.js App Router videi; pašreizējā vietne saglabā React/Vite.
+
+Katrā blokā ir Saturs, Dizains un izkārtojums, Papildus. Blokus var pievienot, dublēt, dzēst un pārkārtot ar Sanity masīva standarta darbībām. Hero ir līdz divām CTA pogām. Attēliem saglabāta bibliotēka, Crop un Hotspot; logo var augšupielādēt SVG/PNG. Kājenē pievienoti rekvizīti. Jaunu lapu var veidot ar jebkuru esošo bloku kombināciju un jebkura dziļuma vecāklapām.
+
+### Esošo datu pārnešana
+
+Pirms jaunā Studio izvietošanas:
+
+```powershell
+npm --prefix studio run upgrade:builder
+```
+
+Komanda izveido lokālu rezerves kopiju ignorētajā `backups/` mapē. Vienā atomārā transakcijā pārkopē `sections` uz trūkstošu `pageBuilder` un vecās tēmas vērtības uz trūkstošiem jaunajiem iestatījumiem. Saglabā dokumentu ID, bloku atslēgas, melnrakstus un visus vecos laukus. Raksti netiek mainīti. `ifRevisionId` pārtrauc pārnešanu, ja pa vidu kāds dokumentu rediģējis; tad atkārto komandu. Atkārtota palaišana neskar jau pārnestās vai vēlāk izlabotās vērtības.
+
+Izvietošanas secība: jaunais saderīgais frontend → datu pārnešana → jaunais Studio. Starp versijām paliek lasīšanas saderība. Ja jāatgriežas, pirms tam izveido jaunu backup, atjauno iepriekšējo frontend/Studio un izmanto saglabātos vecos laukus. Ja jau veiktas jaunas redaktora izmaiņas, tās jāpārnes no `pageBuilder`/jaunajiem dizaina laukiem atpakaļ uz vecajiem laukiem; vecā rezerves kopija šīs jaunās izmaiņas nesatur. Vecie lauki šajā darbā netiek dzēsti.
+
+Pārbaudes aptver esošu datu saglabāšanu, atkārtotu pārnešanu, tukša konstruktora saglabāšanu, jaunos blokus, rich text anotācijas, fontu un krāsu maiņu pēc Publish, rakstu pieprasīšanu pēc vajadzības un sākotnējo saturu bez gaidīšanas.
+
+Shēmas un teksta redaktors balstīti uz [Sanity Portable Text konfigurāciju](https://www.sanity.io/docs/studio/portable-text-editor-configuration) un [inline objektu API](https://www.sanity.io/docs/developer-guides/add-inline-blocks-to-portable-text-editor).

@@ -3,6 +3,8 @@ import ContactForm from '@/components/ContactForm';
 import { useCms } from './CmsProvider';
 import { CmsButtons, CmsPicture, CmsAnchor, RichText, imageUrl } from './content';
 import type { CmsPage, CmsSection } from '../../cms/model';
+import { CmsIcon } from './CmsIcon';
+import { sanityClient } from '@/lib/sanity';
 
 function sectionStyle(section: CmsSection): CSSProperties {
   const style: CSSProperties = {};
@@ -23,22 +25,27 @@ function SectionContent({ section }: { section: CmsSection }) {
   const intro = <Intro section={section} hero={section._type === 'heroSection'} />;
   switch (section._type) {
     case 'heroSection':
+    case 'textAndMediaSection':
     case 'imageTextSection': {
       const hero = section._type === 'heroSection';
       const layout = hero ? section.layout || 'split' : 'split';
-      return <div className={'cms-feature cms-feature--' + layout + ' cms-image--' + (section.imagePosition || 'right')}
+      const file = section.video?.asset?._ref.match(/^file-([a-zA-Z0-9]+)-(mp4|webm)$/);
+      const videoUrl = file ? `https://cdn.sanity.io/files/${sanityClient.config().projectId}/${sanityClient.config().dataset}/${file[1]}.${file[2]}` : undefined;
+      return <div className={'cms-feature cms-feature--' + layout + ' cms-ratio--' + (section.columnRatio || '50-50') + ' cms-image--' + (section.imagePosition || 'right')}
         style={layout === 'background' ? { backgroundImage: `linear-gradient(90deg, rgba(0,0,0,.62), rgba(0,0,0,.25)), url("${imageUrl(section.image) || ''}")` } : undefined}>
         <div className="cms-feature-copy">{intro}<CmsButtons buttons={section.buttons} /></div>
-        {layout !== 'background' && <div className="cms-feature-image" data-cms-path="image"><CmsPicture image={section.image}
-          eager={hero} className={section.imageFit === 'contain' ? 'cms-image-contain' : ''} /></div>}
+        {layout !== 'background' && <div className="cms-feature-image" data-cms-path={videoUrl ? 'video' : 'image'}>{videoUrl
+          ? <video controls preload="metadata" playsInline poster={imageUrl(section.image)} src={videoUrl} aria-label={section.image?.alt || section.title || 'Video'} />
+          : <CmsPicture image={section.image} eager={hero} className={section.imageFit === 'contain' ? 'cms-image-contain' : ''} />}</div>}
       </div>;
     }
     case 'textSection':
     case 'ctaSection': return <div className="cms-copy">{intro}<CmsButtons buttons={section.buttons} /></div>;
+    case 'featuresSection':
     case 'cardsSection': return <>{intro}<div className={'cms-grid cms-grid--' + (section.columns || 3)}>
       {section.items?.map(item => <article className="cms-card" key={item._key} data-cms-item={item._key}>
         <div data-cms-path="image"><CmsPicture image={item.image} /></div>
-        <div className="cms-card-copy"><h3 data-cms-path="title">{item.title}</h3><p className="cms-preline" data-cms-path="text">{item.text}</p>
+        <div className="cms-card-copy"><div data-cms-path="icon"><CmsIcon name={item.icon} /></div><h3 data-cms-path="title">{item.title}</h3><p className="cms-preline" data-cms-path="text">{item.text}</p>
           <RichText value={item.body} />{item.price && <p className="cms-price" data-cms-path="price">{item.price}</p>}
           {item.link && <CmsAnchor link={item.link} className="cms-button cms-button--secondary" />}
         </div></article>)}
@@ -61,6 +68,14 @@ function SectionContent({ section }: { section: CmsSection }) {
         <blockquote data-cms-path="text">“{item.text}”</blockquote><figcaption><CmsPicture image={item.image} /><div><strong>{item.author}</strong>{item.role && <p>{item.role}</p>}</div></figcaption>
       </figure>)}
     </div></>;
+    case 'quoteSection': return <figure className="cms-single-quote">
+      <blockquote data-cms-path="quote">{section.quote}</blockquote>
+      <figcaption><div data-cms-path="image"><CmsPicture image={section.image} /></div><div><strong data-cms-path="author">{section.author}</strong>{section.role && <p data-cms-path="role">{section.role}</p>}</div></figcaption>
+    </figure>;
+    case 'ctaBanner': return <div className={'cms-banner cms-padding--' + (section.style?.padding || 'large') + (section.image ? ' cms-banner--image' : '')}
+      style={section.image ? { backgroundImage: `linear-gradient(90deg, rgba(0,0,0,.65), rgba(0,0,0,.35)), url("${imageUrl(section.image) || ''}")`, color: section.style?.textColor || '#ffffff' } : undefined}>
+      <div className={'cms-container cms-width--' + (section.style?.width || 'normal')}><div className="cms-banner-copy">{intro}<CmsButtons buttons={section.buttons} /></div></div>
+    </div>;
     case 'statsSection': return <>{intro}<div className={'cms-grid cms-grid--' + (section.columns || 3)}>{section.items?.map(item =>
       <div className="cms-stat" key={item._key} data-cms-item={item._key}><strong data-cms-path="value">{item.value}</strong><p data-cms-path="title">{item.title}</p></div>)}</div></>;
     case 'contactSection': return <>{intro}<ContactForm settings={{ ...settings?.contact, ...section.contact }} formId={section._key} preview={preview} />
