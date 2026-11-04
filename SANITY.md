@@ -129,3 +129,11 @@ Pilnā repozitorija lint pārbaude iziet bez kļūdām; paliek 9 Fast Refresh br
 Frontend un Studio noklusējumi ir pārslēgti uz `sxvw8jh8`. Šajā projektā saglabāti arī agrākie raksti un to melnraksti. Tie pieejami Studio sadaļā “Raksti”, bet publicētajā vietnē — lapā `/raksti` un atsevišķās rakstu apakšlapās. Vienādu iepriekšējo rakstu adrešu gadījumā tiek veidotas atšķirīgas adreses ar dokumenta ID; paši raksti netiek pārrakstīti.
 
 Ja hostinga panelī jau ir iestatīts vecais `VITE_SANITY_PROJECT_ID`, nomainiet to uz `sxvw8jh8`; `VITE_SANITY_STUDIO_URL` jābūt `https://izaugtmilestiba-sxvw8jh8.sanity.studio`. Pēc šo divu build mainīgo maiņas vajadzīgs viens Redeploy.
+
+## Sākotnējā satura ielāde
+
+Production build nolasa publicēto Sanity saturu un iekļauj to vietnē. Pirmajā atvēršanā saturs ir pieejams uzreiz pēc JavaScript ielādes, negaidot Sanity pieprasījumu. Pārlūks fonā vienmēr pieprasa aktuālo saturu; Publish izmaiņas turpina parādīties bez jaunas izvietošanas. Ja Sanity nav sasniedzams, paliek redzama izvietošanas laikā saglabātā versija. Melnraksti šajā kopijā netiek iekļauti.
+
+Rakstu sarakstā un sākumlapā netiek lejupielādēti visu rakstu pilnie teksti. Konkrētā raksta teksts tiek pieprasīts, atverot tā adresi; virsraksts un ievads ir pieejami jau sākotnējā kopijā. Studio melnrakstu priekšskatījums saglabā pilno rediģējamo saturu.
+
+Build nepieciešama piekļuve Sanity publicētajiem datiem; kļūmes gadījumā jaunā izvietošana apstājas, saglabājot iepriekšējo izvietojumu. Papildu mainīgie vai tokeni nav vajadzīgi.

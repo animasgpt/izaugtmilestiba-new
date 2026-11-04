@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import CmsPage from '../cms/CmsPage';
 import { defaultSnapshot } from '../../cms/defaults';
 import type { SiteSnapshot, CmsSection } from '../../cms/model';
+import { ARTICLE_QUERY, SITE_QUERY } from '../../cms/query';
 
 const api = vi.hoisted(() => ({ fetch: vi.fn(), listeners: [] as (() => void)[] }));
 vi.mock('@/lib/sanity', async importOriginal => {
@@ -25,9 +26,35 @@ function mount(data: SiteSnapshot, path = '/') {
   return { ...result, client };
 }
 beforeEach(() => { api.fetch.mockReset(); api.listeners.length = 0; window.scrollTo = vi.fn(); HTMLElement.prototype.scrollIntoView = vi.fn(); });
-afterEach(cleanup);
+afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
 describe('Sanity controls the actual public website', () => {
+  it('shows deployed published content immediately while a slow Sanity refresh is pending', async () => {
+    const deployed = snapshot();
+    deployed.pages[0].sections = [{ _type: 'textSection', _key: 'intro', title: 'Uzreiz redzams saturs' }];
+    vi.stubGlobal('__CMS_INITIAL_SNAPSHOT__', deployed);
+    let resolveRefresh!: (value: SiteSnapshot) => void;
+    api.fetch.mockImplementation(() => new Promise<SiteSnapshot>(resolve => { resolveRefresh = resolve; }));
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: 0 } } });
+    render(<QueryClientProvider client={client}><MemoryRouter><CmsPage /></MemoryRouter></QueryClientProvider>);
+    expect(screen.getByRole('heading', { name: 'Uzreiz redzams saturs' })).toBeInTheDocument();
+    expect(screen.queryByText('Ielādē…')).not.toBeInTheDocument();
+    const latest = structuredClone(deployed);
+    latest.pages[0].sections![0].title = 'Jaunākās Sanity izmaiņas';
+    await act(async () => resolveRefresh(latest));
+    expect(await screen.findByRole('heading', { name: 'Jaunākās Sanity izmaiņas' })).toBeInTheDocument();
+  });
+  it('keeps deployed content visible when the initial Sanity refresh fails', async () => {
+    const deployed = snapshot();
+    deployed.pages[0].sections = [{ _type: 'textSection', _key: 'intro', title: 'Pieejams arī bez Sanity' }];
+    vi.stubGlobal('__CMS_INITIAL_SNAPSHOT__', deployed);
+    api.fetch.mockRejectedValue(new Error('Offline'));
+    const client = new QueryClient({ defaultOptions: { queries: { gcTime: 0 } } });
+    render(<QueryClientProvider client={client}><MemoryRouter><CmsPage /></MemoryRouter></QueryClientProvider>);
+    await waitFor(() => expect(client.getQueryState(['cms-site'])?.status).toBe('error'), { timeout: 3000 });
+    expect(screen.getByRole('heading', { name: 'Pieejams arī bez Sanity' })).toBeInTheDocument();
+    expect(screen.queryByText('Ielādē…')).not.toBeInTheDocument();
+  });
   it('renders page text, changed logo, nested navigation, footer and theme from one snapshot', async () => {
     const data = snapshot();
     data.pages[0].sections = [{ _type: 'textSection', _key: 'intro', title: 'Jaunais virsraksts' }];
@@ -70,13 +97,27 @@ describe('Sanity controls the actual public website', () => {
     mount(data);
     expect(await screen.findByRole('heading', { name: 'Lapa nav atrasta' })).toBeInTheDocument();
   });
-  it('renders existing articles and updates their text from the same CMS snapshot', async () => {
+  it('loads a full article only when its route is opened', async () => {
     const data = snapshot();
     data.pages.push({ _id: 'page-articles', _type: 'page', title: 'Raksti', slug: { current: 'raksti' }, sections: [{ _key: 'list', _type: 'articleListSection', title: 'Rakstu saraksts' }] });
     data.articles = [{ _id: 'article-one', _type: 'article', title: 'Esošais raksts', slug: { current: 'esosais' }, excerpt: 'Raksta ievads', body: [{ _type: 'block', _key: 'p', children: [{ _type: 'span', _key: 's', text: 'Saglabātais raksta teksts' }] }] }];
-    mount(data, '/raksti/esosais');
+    const fullArticle = data.articles[0];
+    data.articles = [{ ...fullArticle, body: undefined }];
+    api.fetch.mockImplementation((query: string) => Promise.resolve(query === ARTICLE_QUERY ? fullArticle : data));
+    const client = new QueryClient({ defaultOptions: { queries: { gcTime: 0 } } });
+    render(<QueryClientProvider client={client}><MemoryRouter initialEntries={['/raksti/esosais']}><CmsPage /></MemoryRouter></QueryClientProvider>);
     expect(await screen.findByRole('heading', { name: 'Esošais raksts' })).toBeInTheDocument();
-    expect(screen.getByText('Saglabātais raksta teksts')).toBeInTheDocument();
+    expect(await screen.findByText('Saglabātais raksta teksts')).toBeInTheDocument();
+    expect(api.fetch).toHaveBeenCalledWith(ARTICLE_QUERY, { id: 'article-one' }, { perspective: 'published' });
+    const updated = { ...fullArticle, body: [{ _type: 'block', _key: 'p', children: [{ _type: 'span', _key: 's', text: 'Publicētais labojums' }] }] };
+    api.fetch.mockImplementation((query: string) => Promise.resolve(query === ARTICLE_QUERY ? updated : data));
+    act(() => api.listeners.forEach(next => next()));
+    expect(await screen.findByText('Publicētais labojums')).toBeInTheDocument();
+  });
+  it('does not request article bodies on the homepage', async () => {
+    mount(snapshot());
+    await waitFor(() => expect(api.fetch).toHaveBeenCalled());
+    expect(api.fetch.mock.calls.every(([query]) => query === SITE_QUERY)).toBe(true);
   });
   it('respects removal of optional form choices and the footer title', async () => {
     const data = snapshot();
