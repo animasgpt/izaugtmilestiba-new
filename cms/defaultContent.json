@@ -1,0 +1,628 @@
+{
+  "settings": {
+    "_id": "siteSettings",
+    "_type": "siteSettings",
+    "title": "Izaugt mīlestībā",
+    "logo": {
+      "_type": "image",
+      "fallback": "logo",
+      "alt": "Izaugt mīlestībā logo"
+    },
+    "showTitle": true,
+    "logoWidth": 48,
+    "header": {
+      "sticky": true,
+      "layout": "left",
+      "navigation": [
+        {
+          "_type": "navigationLink",
+          "_key": "about",
+          "label": "Par mani",
+          "kind": "url",
+          "href": "/#about"
+        },
+        {
+          "_type": "navigationLink",
+          "_key": "services",
+          "label": "Pakalpojumi",
+          "kind": "url",
+          "href": "/#services"
+        },
+        {
+          "_type": "navigationLink",
+          "_key": "book",
+          "label": "Grāmata",
+          "kind": "url",
+          "href": "/#book"
+        },
+        {
+          "_type": "navigationLink",
+          "_key": "contact",
+          "label": "Kontakti",
+          "kind": "url",
+          "href": "/#contact"
+        }
+      ]
+    },
+    "footer": {
+      "title": "Izaugt mīlestībā",
+      "copyright": "© {year} Madara Pauzere",
+      "socialLinks": [
+        {
+          "_type": "cmsLink",
+          "_key": "httpswwwinstagramcomizaugtmilestiba",
+          "label": "Instagram",
+          "kind": "url",
+          "href": "https://www.instagram.com/izaugtmilestiba"
+        }
+      ]
+    },
+    "contact": {
+      "nameLabel": "Vārds",
+      "emailLabel": "E-pasts",
+      "phoneLabel": "Telefons",
+      "messageLabel": "Ziņojums",
+      "serviceLabel": "Interesē",
+      "submitLabel": "Nosūtīt",
+      "successMessage": "Paldies! Jūsu ziņojums ir nosūtīts. Sazināšos ar jums drīzumā.",
+      "errorMessage": "Kļūda nosūtot ziņojumu. Lūdzu, mēģiniet vēlreiz.",
+      "services": [
+        {
+          "_key": "consultation-onsite",
+          "title": "Konsultācija klātienē",
+          "value": "consultation-onsite",
+          "_type": "formService"
+        },
+        {
+          "_key": "consultation-online",
+          "title": "Attālināta konsultācija",
+          "value": "consultation-online",
+          "_type": "formService"
+        },
+        {
+          "_key": "book",
+          "title": "Grāmatas iegāde",
+          "value": "book",
+          "_type": "formService"
+        },
+        {
+          "_key": "other",
+          "title": "Cits",
+          "value": "other",
+          "_type": "formService"
+        }
+      ]
+    },
+    "seo": {
+      "title": "Izaugt mīlestībā | Madara Pauzere - PEP mamma",
+      "description": "Sertificēta PEP mamma Madara Pauzere piedāvā konsultācijas vecākiem klātienē un attālināti. Grāmatas Mammas sajūtu dienasgrāmata autore.",
+      "image": {
+        "_type": "image",
+        "fallback": "hero",
+        "alt": "Madara Pauzere"
+      }
+    },
+    "theme": {
+      "headingFont": "Playfair Display",
+      "bodyFont": "Lato",
+      "radius": 16,
+      "contentWidth": 1280,
+      "buttonStyle": "rounded"
+    }
+  },
+  "pages": [
+    {
+      "_id": "page-home",
+      "_type": "page",
+      "title": "Sākumlapa",
+      "sections": [
+        {
+          "_type": "heroSection",
+          "_key": "hero",
+          "anchor": "hero",
+          "label": "Ievads",
+          "title": "Izaugt mīlestībā",
+          "subtitle": "Atbalsts, kļūstot par vecākiem.",
+          "body": [
+            {
+              "_type": "block",
+              "_key": "p0",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Madara Pauzere",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p1",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Divu dēlu mamma,",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p2",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Sertificēta PEP mamma,",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p3",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Izdevuma \"Mammas sajūtu dienasgrāmata\" radītāja",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p4",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Žurnālgrāmatu \"Bērniņu gaidot\", \"Mūsu zīdainis\", \"Mūsu bērns. 2-3 gadi\" veidotāja.",
+                  "marks": []
+                }
+              ]
+            }
+          ],
+          "image": {
+            "_type": "image",
+            "fallback": "hero",
+            "alt": "Madara Pauzere - PEP mamma"
+          },
+          "layout": "split",
+          "imagePosition": "right",
+          "buttons": [
+            {
+              "_type": "cmsLink",
+              "_key": "contact",
+              "label": "Sazinies ar mani",
+              "kind": "url",
+              "href": "/#contact"
+            }
+          ],
+          "style": {
+            "padding": "large"
+          }
+        },
+        {
+          "_type": "textSection",
+          "_key": "about",
+          "anchor": "about",
+          "title": "Par mani",
+          "body": [
+            {
+              "_type": "block",
+              "_key": "p0",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Esmu sertificēta PEP (Parent Effectiveness Program) mamma un grāmatas \"Mammas sajūtu dienasgrāmata\" autore. Mana misija ir palīdzēt vecākiem veidot ciešākas, mīlošākas attiecības ar saviem bērniem, izmantojot efektīvas komunikācijas un audzināšanas metodes.",
+                  "marks": []
+                }
+              ]
+            }
+          ],
+          "buttons": [
+            {
+              "_type": "cmsLink",
+              "_key": "more",
+              "label": "Lasi vairāk",
+              "kind": "page",
+              "page": {
+                "_type": "reference",
+                "_ref": "page-about"
+              },
+              "variant": "outline"
+            }
+          ],
+          "style": {
+            "background": "card",
+            "align": "center",
+            "width": "narrow",
+            "padding": "large"
+          }
+        },
+        {
+          "_type": "cardsSection",
+          "_key": "services",
+          "anchor": "services",
+          "title": "Tavam atbalstam",
+          "columns": 3,
+          "style": {
+            "background": "accent",
+            "align": "center",
+            "padding": "large"
+          },
+          "items": [
+            {
+              "_type": "contentCard",
+              "_key": "onsite",
+              "title": "Konsultācija klātienē",
+              "text": "Individuāla saruna mājīgā vidē, veltot pilnu uzmanību Tev un Tavām sajūtām.",
+              "price": "50€",
+              "image": {
+                "_type": "image",
+                "fallback": "onsite",
+                "alt": "Konsultācija klātienē"
+              },
+              "link": {
+                "_type": "cmsLink",
+                "_key": "contact",
+                "label": "Sazinies",
+                "kind": "url",
+                "href": "/#contact"
+              }
+            },
+            {
+              "_type": "contentCard",
+              "_key": "online",
+              "title": "Konsultācija online",
+              "text": "Ērts un pieejams atbalsts no jebkuras vietas, kur jūties vislabāk.",
+              "price": "35€",
+              "image": {
+                "_type": "image",
+                "fallback": "online",
+                "alt": "Konsultācija online"
+              },
+              "link": {
+                "_type": "cmsLink",
+                "_key": "contact",
+                "label": "Sazinies",
+                "kind": "url",
+                "href": "/#contact"
+              }
+            },
+            {
+              "_type": "contentCard",
+              "_key": "journal",
+              "title": "Grāmata",
+              "text": "\"Mammas sajūtu dienasgrāmata\" – Tavs ceļvedis un atbalsts ikdienas gaitās.",
+              "price": "19.99€",
+              "image": {
+                "_type": "image",
+                "fallback": "book",
+                "alt": "Grāmata"
+              },
+              "link": {
+                "_type": "cmsLink",
+                "_key": "contact",
+                "label": "Sazinies",
+                "kind": "url",
+                "href": "/#contact"
+              }
+            }
+          ]
+        },
+        {
+          "_type": "imageTextSection",
+          "_key": "book",
+          "anchor": "book",
+          "title": "Mammas sajūtu dienasgrāmata",
+          "body": [
+            {
+              "_type": "block",
+              "_key": "p0",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Šī grāmata ir mans sirds darbs — personīgi stāsti, pārdomas un atziņas par mātes lomu, bērnu audzināšanu un ikdienas izaicinājumiem. Tā ir domāta ikvienai mammai, kas meklē atbalstu un sapratni.",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p1",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Sirsnīgi stāsti par mātes pieredzi",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p2",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Praktiskas atziņas ikdienai",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p3",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Iedvesma un atbalsts mammām",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p4",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Lai iegādātos grāmatu, lūdzu, sazinieties ar mani.",
+                  "marks": []
+                }
+              ]
+            }
+          ],
+          "image": {
+            "_type": "image",
+            "fallback": "book",
+            "alt": "Mammas sajūtu dienasgrāmata - grāmata"
+          },
+          "imagePosition": "left",
+          "imageFit": "contain",
+          "buttons": [
+            {
+              "_type": "cmsLink",
+              "_key": "contact",
+              "label": "Pasūtīt grāmatu",
+              "kind": "url",
+              "href": "/#contact"
+            }
+          ],
+          "style": {
+            "background": "card",
+            "padding": "large"
+          }
+        },
+        {
+          "_type": "contactSection",
+          "_key": "contact",
+          "anchor": "contact",
+          "title": "Sazinies ar mani",
+          "subtitle": "Aizpildiet formu, un es sazināšos ar jums, lai pārrunātu jūsu vajadzības.",
+          "style": {
+            "width": "narrow",
+            "padding": "large"
+          }
+        }
+      ]
+    },
+    {
+      "_id": "page-about",
+      "_type": "page",
+      "title": "Par mani",
+      "slug": {
+        "_type": "slug",
+        "current": "par-mani"
+      },
+      "seo": {
+        "title": "Par mani | Madara Pauzere"
+      },
+      "sections": [
+        {
+          "_type": "imageTextSection",
+          "_key": "intro",
+          "title": "Par mani",
+          "image": {
+            "_type": "image",
+            "fallback": "hero",
+            "alt": "Madara Pauzere"
+          },
+          "imagePosition": "right",
+          "body": [
+            {
+              "_type": "block",
+              "_key": "p0",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Esmu sertificēta PEP (Parent Effectiveness Program) mamma un grāmatas \"Mammas sajūtu dienasgrāmata\" autore. Mana misija ir palīdzēt vecākiem veidot ciešākas, mīlošākas attiecības ar saviem bērniem, izmantojot efektīvas komunikācijas un audzināšanas metodes.",
+                  "marks": []
+                }
+              ]
+            }
+          ],
+          "style": {
+            "padding": "large"
+          }
+        },
+        {
+          "_type": "textSection",
+          "_key": "story",
+          "title": "Izaugt mīlestībā",
+          "body": [
+            {
+              "_type": "block",
+              "_key": "p0",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Es tiešām saprotu teicienu \"Mēs bijām lieliski vecāki. Un tad mums piedzima bērns\".",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p1",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Mana pieredze rāda, ka bērna ienākšana ģimenē izgaismo visu to, kas veiksmīgi maskēts un slēpts varbūt pat gadiem. (Neapzināti. Un arī pašam no sevis.) Un lai kā mēs gribētu sagatavoties mazuļa ienākšanai ģimenē, lai kādas grāmatas lasītu, lai kādus kursus apmeklētu, bērna piedzimšanai nav ekvivalenta - mēs varam mācīties, tikai ejot šai pieredzei cauri. Reiz, intervējot kādu tēti, viņš man teica - \"Vecāku uzdevums ir \"nofeilot\". Jāpieņem, ka mēs kā mammas un tēti pieļausim kļūdas, jo mēs esam tikai cilvēki!\" Un tā patiešām ir - mēs (un arī mūsu vecāki!) ikdienā darām uz 100% - no tiem laika, zināšanu, finansu resursiem, kas mums ir pieejami.",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p2",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Mēs mācāmies būt pietiekami labi vecāki visu dzīvi. Mēs mācāmies, ka bērniem nav vajadzīgi perfekti vecāki - tiem ir vajadzīgi mīloši vecāki. Un saviem bērniem mēs varam iedot tikai to, kas mums ir.",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p3",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Tieši tāpēc rūpes par otru sākas ar mūsu rūpēm pašiem par sevi.",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p4",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Projekts \"Izaugt Mīlestībā\" radies no manām pārdomām par vecāku lomu, no ikdienas situācijām, kurām pati gadu gaitā esmu meklējusi risinājumus. No savas vēlmes saprast un izzināt, no pieredzes, kas gūta. Man nepieder viena un īstā patiesība, es vienmēr saku - mums katram ir sava taisnība savā dzīvē. Esmu ceļā, kā daudzas mammas un tēti. Bet vienu es zinu droši - atbalstam, iedrošinājumam, nevērtējošai, pieņemošas līdzās būšanai ir ļoti liela nozīme, kļūstot par vecāku. Tieši tāpēc šobrīd mācos par PEP mammu - sievieti, kas ir līdzās mammai un pārim, ejot cauri izaicinājumu pilnajam ceļam ar mazuli.",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p5",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Reiz, intervējot bērnu ārstu, reanimatologu un domātāju Pēteri Kļavu, viņš man teica - \"Bērns ir atbildība un iespējamība\". Pēc laika es sapratu, ko viņš ar to domāja. Bērns ir iespēja, kas mums dota, izaugt mīlestībā - pret sevi, lai būtu labāks vecāks. Bērns ir iespēja mums katram izaugt. Mīlestībā.",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p6",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Lai skaists un pateicības pilns ceļš,",
+                  "marks": []
+                }
+              ]
+            },
+            {
+              "_type": "block",
+              "_key": "p7",
+              "style": "normal",
+              "markDefs": [],
+              "children": [
+                {
+                  "_type": "span",
+                  "_key": "s",
+                  "text": "Madara Pauzere.",
+                  "marks": []
+                }
+              ]
+            }
+          ],
+          "style": {
+            "width": "narrow",
+            "background": "card",
+            "padding": "large"
+          }
+        },
+        {
+          "_type": "ctaSection",
+          "_key": "cta",
+          "title": "Atbalsts, kļūstot par vecākiem.",
+          "buttons": [
+            {
+              "_type": "cmsLink",
+              "_key": "contact",
+              "label": "Sazinies ar mani",
+              "kind": "url",
+              "href": "/#contact"
+            }
+          ],
+          "style": {
+            "align": "center",
+            "padding": "large"
+          }
+        }
+      ]
+    }
+  ]
+}

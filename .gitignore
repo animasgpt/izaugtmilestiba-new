@@ -28,3 +28,7 @@ supabase/.branches/
 *.njsproj
 *.sln
 *.sw?
+
+# Generated editor and browser-test output
+.sanity/
+.playwright-mcp/

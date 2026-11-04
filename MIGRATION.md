@@ -1,4 +1,6 @@
-# Pārcelšana uz Vercel un savu Supabase
+# Pārcelšana uz savu hostingu un Supabase
+
+Bezmaksas komerciālās vietnes hostingam izmantojiet Cloudflare Pages; aktuālie soļi ir [SANITY.md](SANITY.md). Zemāk saglabāta arī Vercel konfigurācija, ja izmantojat piemērotu maksas plānu. Vercel Hobby nav paredzēts komerciālai vietnei.
 
 ## Kas jāpārnes
 
@@ -61,7 +63,7 @@ Lielai DB izmantojiet pilnu dump/restore, nevis vienu SQL Editor rezultāta lauk
 ## 3. Pieslēgt Vercel
 
 1. Vercel vajadzīgajā kontā izvēlieties Add New → Project un importējiet
-   `ANIMAS-SIA/izaugtmilestiba`. Citam GitHub kontam piešķiriet repo piekļuvi.
+   `animasgpt/izaugtmilestiba-new`. Citam GitHub kontam piešķiriet repo piekļuvi.
    Izvēlieties zaru ar šīm izmaiņām vai vispirms apvienojiet tās `main`.
 2. Root Directory: repo sakne. `vercel.json` nosaka Vite, `npm ci`, `npm run build`,
    `dist` un pāradresāciju, lai `/admin` un `/admin/content` darbotos pēc pārlādes.

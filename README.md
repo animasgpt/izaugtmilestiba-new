@@ -1,18 +1,22 @@
 # Izaugt mīlestībā
 
-React/Vite vietne ar Vercel hostingu, jūsu Supabase un neatkarīgu Sanity CMS.
+React/Vite vietne ar Sanity vadītām lapām, sadaļām un dizainu. Kontaktformas pieteikumi un administrācijas pieslēgšanās glabājas jūsu Supabase projektā. Bezmaksas frontend hostingam izmantojams Cloudflare Pages.
 
-Pārcelšanas soļi un datu eksports: [MIGRATION.md](MIGRATION.md).
+- [Atvērt Sanity redaktoru](https://izaugtmilestiba-redaktors.sanity.studio/)
+- [Lapu rediģēšana, priekšskatījums un pieslēgšana](SANITY.md)
+- [Datubāzes pārnešanas instrukcija](MIGRATION.md)
 
-Lokāli (Node.js 22):
+Lokāli (Node.js 22.12+):
 
 ```powershell
 npm ci
 Copy-Item .env.example .env.local
-# Aizpildiet jaunā Supabase URL un publisko atslēgu .env.local.
+# Aizpildiet Supabase publisko URL/atslēgu un Sanity Studio adresi.
 npm run dev
 ```
 
-Pārbaudes: `npm run build`, `npm test`, `npm run lint`.
+Studio izstrādei: `npm --prefix studio ci`, pēc tam `npm run studio:dev`.
+
+Pārbaudes: `npm test`, `npm run typecheck`, `npm run build`.
 Datubāzes SQL sagatave: `npm run migration:prepare`.
-Neievietojiet datu eksportus vai servera slepenās atslēgas GitHub.
+Datu eksportus un servera slepenās atslēgas GitHub neievietojiet.

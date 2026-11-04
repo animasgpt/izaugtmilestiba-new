@@ -11,10 +11,16 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "migration:prepare": "node scripts/prepare-database.mjs"
+    "migration:prepare": "node scripts/prepare-database.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
+    "studio:dev": "npm --prefix studio run dev",
+    "studio:build": "npm --prefix studio run build",
+    "studio:deploy": "npm --prefix studio run deploy",
+    "cms:seed": "npm --prefix studio run seed"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
+    "@portabletext/react": "3.2.4",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
