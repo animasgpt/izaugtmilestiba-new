@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { defaultSnapshot } from '../../cms/defaults';
 import type { SiteSettings, CmsPage } from '../../cms/model';
+import { builderUpgrade } from '../../cms/upgrade';
 
 async function main() {
   const client = getCliClient({ apiVersion: '2026-09-10' }).withConfig({ useCdn: false });
@@ -48,6 +49,7 @@ async function main() {
   const cleanLegacy = Object.fromEntries(Object.entries(legacy || {}).filter(([key]) => !key.startsWith('_')));
   const studioUrl = `https://${process.env.SANITY_STUDIO_HOST || 'izaugtmilestiba-sxvw8jh8'}.sanity.studio`;
   const initialSettings = { ...defaults, ...cleanLegacy, builderVersion: 1, studioUrl };
+  Object.assign(initialSettings, builderUpgrade({ ...initialSettings, _type: 'siteSettings' }));
   const transaction = client.transaction();
   transaction.createIfNotExists({ _id: 'siteSettings', _type: 'siteSettings', ...initialSettings });
   transaction.patch('siteSettings', patch => patch.setIfMissing({ ...defaults, builderVersion: 1, studioUrl }).set({ studioUrl }));
@@ -59,7 +61,7 @@ async function main() {
       console.log('Preserved existing draft:', page._id);
       continue;
     }
-    transaction.createIfNotExists(page as CmsPage & { _id: string; _type: string });
+    transaction.createIfNotExists({ ...page, ...builderUpgrade(page) } as CmsPage & { _id: string; _type: string });
   }
   // Normalize array metadata without changing editorial values. Older website
   // data used cmsLink objects for navigation and untyped form-service objects.

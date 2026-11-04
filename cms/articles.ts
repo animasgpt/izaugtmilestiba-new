@@ -1,10 +1,12 @@
 import type { CmsArticle, CmsPage, SiteSnapshot } from './model';
+import { normalizeSnapshot } from './normalize';
 const cleanId = (id: string) => id.replace(/^drafts\./, '');
 function baseSlug(article: CmsArticle) {
   const slug = article.slug?.current || article.title || 'raksts';
   return slug.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'raksts';
 }
 export function withArticlePages(snapshot: SiteSnapshot): SiteSnapshot {
+  snapshot = normalizeSnapshot(snapshot);
   const articles = (snapshot.articles || []).map(article => ({ ...article, _id: cleanId(article._id) }));
   if (!articles.length || !snapshot.pages.some(page => page._id === 'page-articles')) return snapshot;
   const pages: CmsPage[] = articles.map(article => {

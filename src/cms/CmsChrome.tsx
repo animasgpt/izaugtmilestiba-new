@@ -44,6 +44,7 @@ export function CmsFooter() {
       {footer?.showLogo && <CmsPicture image={footer.logo || settings.logo} className="cms-logo" />}
       {footer?.showTitle !== false && <p className="cms-footer-title">{footer?.title ?? settings.title}</p>}
       {footer?.text && <p className="cms-preline">{footer.text}</p>}
+      {footer?.companyDetails && <p className="cms-preline cms-company-details" data-cms-path="footer.companyDetails">{footer.companyDetails}</p>}
     </div>
     {footer?.columns?.map(column => <div key={column._key}><h2>{column.title}</h2><ul>{column.links?.map((link, i) =>
       <li key={link._key || i}><CmsAnchor link={link} /></li>)}</ul></div>)}

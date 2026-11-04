@@ -8,6 +8,7 @@ import { pagePath, normalizePath } from '../../cms/routing';
 import { themeVariables } from '@/lib/cmsTheme';
 import type { CmsPage as Page, SiteSettings } from '../../cms/model';
 import './cms.css';
+import { googleFontsUrl } from '../../cms/design';
 
 function useMetadata(page: Page | undefined, settings: SiteSettings | null, path: string, preview: boolean) {
   useEffect(() => {
@@ -41,6 +42,16 @@ function RenderPage() {
   const location = useLocation();
   const path = normalizePath(location.pathname);
   const page = snapshot.pages.find(p => pagePath(p, snapshot.pages) === path);
+  const headingFont = snapshot.settings?.theme?.headingFont;
+  const bodyFont = snapshot.settings?.theme?.bodyFont;
+  useEffect(() => {
+    const href = googleFontsUrl(headingFont, bodyFont);
+    if (!href) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet'; link.href = href; link.dataset.cmsFonts = 'true';
+    document.head.appendChild(link);
+    return () => link.remove();
+  }, [headingFont, bodyFont]);
   useMetadata(page, snapshot.settings, path, preview);
   useEffect(() => {
     if (loading) return;
@@ -60,11 +71,20 @@ function RenderPage() {
     if (!documentId) return;
     event.preventDefault(); event.stopPropagation();
     const sourceType = target.closest<HTMLElement>('[data-cms-source-type]')?.dataset.cmsSourceType;
-    const sourcePath = sourceType === 'article' ? (field === 'image' ? 'coverImage' : field === 'subtitle' ? 'excerpt' : field === 'eyebrow' ? 'category' : field || '') : section ? `sections[_key=="${section}"]${item ? `.items[_key=="${item}"]` : ''}${field ? '.' + field : ''}` : field || '';
+    const sectionField = page?.pageBuilder !== undefined ? 'pageBuilder' : 'sections';
+    const sourcePath = sourceType === 'article' ? (field === 'image' ? 'coverImage' : field === 'subtitle' ? 'excerpt' : field === 'eyebrow' ? 'category' : field || '') : section ? `${sectionField}[_key=="${section}"]${item ? `.items[_key=="${item}"]` : ''}${field ? '.' + field : ''}` : field || '';
     const origin = new URL(import.meta.env.VITE_SANITY_STUDIO_URL || snapshot.settings?.studioUrl || 'http://localhost:3333').origin;
     window.parent.postMessage({ type: 'cms:edit', id: documentId, schemaType: sourceType === 'article' ? 'article' : documentId === 'siteSettings' ? 'siteSettings' : 'page', path: sourcePath }, origin);
   };
   const vars = { ...themeVariables(snapshot.settings?.theme), '--cms-logo-width': `${Math.max(24, Math.min(260, snapshot.settings?.logoWidth || 48))}px` } as CSSProperties;
+  useEffect(() => {
+    const root = document.documentElement;
+    const values = themeVariables({ headingFont, bodyFont });
+    const previous = [root.style.getPropertyValue('--font-heading'), root.style.getPropertyValue('--font-body')];
+    root.style.setProperty('--font-heading', values['--cms-heading-font']);
+    root.style.setProperty('--font-body', values['--cms-body-font']);
+    return () => { ['--font-heading', '--font-body'].forEach((name, i) => previous[i] ? root.style.setProperty(name, previous[i]) : root.style.removeProperty(name)); };
+  }, [headingFont, bodyFont]);
   return <div className={'cms-site' + (editing && preview ? ' cms-inspecting' : '')} style={vars} onClickCapture={inspect}>
     {(!page || !page.hideHeader) && <CmsHeader />}
     {loading ? <main className="cms-status" aria-live="polite">Ielādē…</main> : page ? <CmsSections page={page} /> :

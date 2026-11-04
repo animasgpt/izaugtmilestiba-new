@@ -1,4 +1,5 @@
 import type { SiteSettings } from '../../cms/model';
+import { fontFamilies } from '../../cms/design';
 
 export function hexToHsl(hex?: string): string | undefined {
   if (!hex || !/^#[\da-f]{6}$/i.test(hex)) return undefined;
@@ -11,10 +12,6 @@ export function hexToHsl(hex?: string): string | undefined {
   h = (h * 60 + 360) % 360;
   return `${h.toFixed(1)} ${(s * 100).toFixed(1)}% ${(l * 100).toFixed(1)}%`;
 }
-const fonts: Record<string, string> = {
-  'Playfair Display': "'Playfair Display', Georgia, serif", Lato: "'Lato', sans-serif",
-  Georgia: 'Georgia, serif', Arial: 'Arial, sans-serif', 'Source Code Pro': "'Source Code Pro', monospace",
-};
 export function themeVariables(theme: SiteSettings['theme']): Record<string, string> {
   const values: Record<string, string> = {};
   const names = { background: 'background', foreground: 'foreground', primary: 'primary', primaryForeground: 'primary-foreground',
@@ -28,10 +25,12 @@ export function themeVariables(theme: SiteSettings['theme']): Record<string, str
   }
   if (values['--primary']) values['--ring'] = values['--primary'];
   if (values['--border']) values['--input'] = values['--border'];
-  values['--cms-heading-font'] = fonts[theme?.headingFont || 'Playfair Display'] || fonts['Playfair Display'];
-  values['--cms-body-font'] = fonts[theme?.bodyFont || 'Lato'] || fonts.Lato;
+  values['--cms-heading-font'] = Object.prototype.hasOwnProperty.call(fontFamilies, theme?.headingFont || '') ? fontFamilies[theme!.headingFont!] : fontFamilies['Playfair Display'];
+  values['--cms-body-font'] = Object.prototype.hasOwnProperty.call(fontFamilies, theme?.bodyFont || '') ? fontFamilies[theme!.bodyFont!] : fontFamilies.Lato;
   if (typeof theme?.radius === 'number') values['--radius'] = `${Math.max(0, Math.min(40, theme.radius))}px`;
   values['--cms-width'] = `${Math.max(720, Math.min(1600, theme?.contentWidth || 1280))}px`;
-  values['--cms-button-radius'] = theme?.buttonStyle === 'pill' ? '999px' : theme?.buttonStyle === 'square' ? '0px' : 'var(--radius)';
+  values['--cms-button-radius'] = ['pill', 'rounded-full'].includes(theme?.buttonStyle || '') ? '999px'
+    : ['square', 'rounded-none'].includes(theme?.buttonStyle || '') ? '0px'
+    : theme?.buttonStyle === 'rounded-lg' ? '8px' : 'var(--radius)';
   return values;
 }
