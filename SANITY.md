@@ -47,7 +47,9 @@ Atveriet dokumenta cilni **Priekšskatījums**. Var pārslēgt datoru/telefonu. 
 
 Sanity automātiski saglabā melnrakstu. Publiskajā vietnē tas nonāk tikai pēc **Publish**. Ja mainīti vairāki dokumenti, publicējiet katru no tiem. Atvērtā vietne saņem publicētās izmaiņas reāllaikā; koda kompilācija vai hostinga pārlikšana ikdienas saturam nav nepieciešama.
 
-Priekšskatījumā kontaktforma nesūta īstus pieteikumus. Publiskie pieteikumi paliek Supabase un ir apskatāmi `/admin`. Tie netiek kopēti publiskajā Sanity dataset.
+Priekšskatījumā kontaktforma nesūta īstus pieteikumus. Publiskie pieteikumi paliek Supabase un ir apskatāmi `/admin/pieteikumi` pēc pieslēgšanās `/admin-login`. Tie netiek kopēti publiskajā Sanity dataset.
+
+Vietnes `/studio` un `/admin` atver Sanity Studio. Arī vecā `/admin/content` saite atver redaktoru. Sanity pieslēgšanās izmanto Sanity kontu; pieteikumu panelim saglabāta Supabase administratora pieslēgšanās. Pāradresācija darbojas gan serverī (`vercel.json`), gan React maršrutētājā. Mainot Studio hostu, atjauniniet gan `vercel.json` adreses, gan `VITE_SANITY_STUDIO_URL`.
 
 ## Vienreizējā jaunās vietnes pieslēgšana
 

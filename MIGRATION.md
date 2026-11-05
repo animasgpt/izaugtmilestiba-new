@@ -66,7 +66,7 @@ Lielai DB izmantojiet pilnu dump/restore, nevis vienu SQL Editor rezultāta lauk
    `animasgpt/izaugtmilestiba-new`. Citam GitHub kontam piešķiriet repo piekļuvi.
    Izvēlieties zaru ar šīm izmaiņām vai vispirms apvienojiet tās `main`.
 2. Root Directory: repo sakne. `vercel.json` nosaka Vite, `npm ci`, `npm run build`,
-   `dist` un pāradresāciju, lai `/admin` un `/admin/content` darbotos pēc pārlādes.
+   `dist` un SPA maršrutēšanu; `/studio`, `/admin` un `/admin/content` atver Sanity.
 3. Vercel Environment Variables iestatiet:
 
 | Mainīgais | Vērtība |
@@ -93,7 +93,7 @@ Production vidēm izvēlieties apzināti; formas testiem vēlams atsevišķs tes
 - Nosūtiet marķētu testa pieteikumu; pārbaudiet to jaunajā Supabase.
 - Pieslēdzieties `/admin-login` ar jauno paroli, pārbaudiet pieteikumus un satura
   rediģēšanu. Daļa publiskās lapas tekstu jau pašlaik nāk no Sanity vai ir statiski kodā.
-- Pārlādējiet tieši `/admin` un `/admin/content`; jādarbojas maršrutēšanai.
+- Pārlādējiet tieši `/admin/pieteikumi`; jādarbojas aizsargātajam pieteikumu panelim. `/studio`, `/admin` un `/admin/content` jāatver Sanity redaktors.
 - Izrakstieties; privātā logā administrācijai jāprasa pieslēgšanās.
 - Pārbaudiet `03-verify.sql` RLS/piekļuves rezultātus un Supabase Security Advisor.
   Publiski nevar lasīt pieteikumus vai lomas.

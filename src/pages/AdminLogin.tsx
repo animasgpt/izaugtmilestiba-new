@@ -26,7 +26,7 @@ const AdminLogin = () => {
           .maybeSingle();
         
         if (roles) {
-          navigate("/admin");
+          navigate("/admin/pieteikumi");
         }
       }
     };
@@ -56,7 +56,7 @@ const AdminLogin = () => {
 
         if (roles) {
           toast.success("Veiksmīgi pieslēdzies!");
-          navigate("/admin");
+          navigate("/admin/pieteikumi");
         } else {
           await supabase.auth.signOut();
           toast.error("Nav administratora tiesību");

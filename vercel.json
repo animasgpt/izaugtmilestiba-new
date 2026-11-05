@@ -4,5 +4,10 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "redirects": [
+    { "source": "/studio/:path*", "destination": "https://izaugtmilestiba-sxvw8jh8.sanity.studio/:path*", "permanent": false },
+    { "source": "/admin", "destination": "https://izaugtmilestiba-sxvw8jh8.sanity.studio/", "permanent": false },
+    { "source": "/admin/content", "destination": "https://izaugtmilestiba-sxvw8jh8.sanity.studio/", "permanent": false }
+  ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
