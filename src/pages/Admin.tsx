@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { LogOut, Mail, Phone, User, Calendar, MessageSquare, Tag, Loader2, FileEdit } from "lucide-react";
@@ -34,7 +33,6 @@ const serviceTypeLabels: { [key: string]: string } = {
 const Admin = () => {
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
   const [isDataLoading, setIsDataLoading] = useState(true);
-  const navigate = useNavigate();
   const { isLoading: isAuthLoading, isAuthorized, signOut } = useAdminAuth();
 
   useEffect(() => {
@@ -94,10 +92,9 @@ const Admin = () => {
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
-              onClick={() => navigate("/admin/content")}
+              asChild
             >
-              <FileEdit className="w-4 h-4 mr-2" />
-              Labot saturu
+              <a href="/studio"><FileEdit className="w-4 h-4 mr-2" />Labot saturu</a>
             </Button>
             <button
               onClick={handleLogout}
