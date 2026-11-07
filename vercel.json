@@ -7,7 +7,10 @@
   "redirects": [
     { "source": "/studio/:path*", "destination": "https://izaugtmilestiba-sxvw8jh8.sanity.studio/:path*", "permanent": false },
     { "source": "/admin", "destination": "https://izaugtmilestiba-sxvw8jh8.sanity.studio/", "permanent": false },
-    { "source": "/admin/content", "destination": "https://izaugtmilestiba-sxvw8jh8.sanity.studio/", "permanent": false }
+    { "source": "/admin/content", "destination": "https://izaugtmilestiba-sxvw8jh8.sanity.studio/", "permanent": false },
+    { "source": "/post/:slug", "destination": "/raksti/:slug", "permanent": true },
+    { "source": "/blog", "destination": "/raksti", "permanent": true },
+    { "source": "/blog/:path*", "destination": "/raksti", "permanent": true }
   ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
